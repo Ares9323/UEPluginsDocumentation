@@ -48,3 +48,48 @@
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/README.md">View on GitHub</a></td>
     </tr>
 </table>
+
+# Ares9323's Unreal Engine Projects & Asset Packs
+
+<table>
+    <tr>
+        <th>Plugin</th>
+        <th>Product</th>
+        <th>Marketplace Link</th>
+        <th>Documentation</th>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/RomanMosaicTexturePack/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Roman Mosaic Texture Pack</h3>
+            <p>Roman Mosaic Tiles Textures, photo-scanned from Italian churches</p>
+            <br>
+        </td>
+        <td><a href="https://unrealengine.com/marketplace/en-US/product/0b8a4ffacf3f4c70b0576dd658de7996">Buy on the Unreal Marketplace</a></td>
+        <td>N/A</td>
+    </tr>
+</table>
+
+# If you use Blender, you might want to check out:
+
+<table>
+    <tr>
+        <th>Plugin</th>
+        <th>Product</th>
+        <th>Marketplace Link</th>
+        <th>Documentation</th>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/Blender2c2i/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Blender Two Clicks To Import</h3>
+            <p>Set Blender2C2I as your default program for .fbx, .obj, .glb, .gltf, .stl, .x3d, .wrl, .stl, .ply, .abc, .dae, .bvh, .3ds, .dxf, .ifc, .skp, .svg, .blend</p>
+            <br>
+        </td>
+        <td>
+            <a href="https://ares9323.gumroad.com/l/blender2c2i">Buy on GumRoad</a><br>
+            <a href="https://blendermarket.com/products/blender2c2i">Buy on BlenderMarket</a>
+        </td>
+        <td><a href="https://blendermarket.com/products/blender2c2i/docs">View on BlenderMarket</a></td>
+    </tr>
+</table>
