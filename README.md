@@ -47,6 +47,16 @@
         <td><a href="https://unrealengine.com/marketplace/en-US/product/1f20aaa8b05e43be99c3be67bf5c7745">Buy on the Unreal Marketplace</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/README.md">View on GitHub</a></td>
     </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/LevelBookmarks/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Level Bookmarks</h3>
+            <p>Add your favourite levels to an easily accessible dropdown menu in the toolbar</p>
+            <br>
+        </td>
+        <td><a href="https://unrealengine.com/marketplace/en-US/product/b4a88d66c795480fb803a0f4f8b1907e">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/LevelBookmarks/README.md">View on GitHub</a></td>
+    </tr>
 </table>
 
 # Ares9323's Unreal Engine Projects & Asset Packs
