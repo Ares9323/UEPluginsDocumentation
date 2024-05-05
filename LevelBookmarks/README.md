@@ -12,6 +12,8 @@ Available on the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US
 * Restart the editor
 
 ## How to use
+* Click on the dropdown menu in the toolbar if you want to add the current level to the bookmarks
 * Right click a level and select "Add to Level Bookmarks" to add it to the dropdown menu
 * Click on a level in the dropdown menu to open it
 * Shift + click a level to remove it from the dropdown menu
+* Alt + click a level to focus it in the content browser
