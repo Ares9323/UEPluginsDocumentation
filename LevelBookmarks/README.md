@@ -2,7 +2,7 @@
 
 # Level Bookmarks
 Add your favourite levels to an easily accessible dropdown menu in the toolbar.
-Available on the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US/product/b4a88d66c795480fb803a0f4f8b1907e)
+Available on [FAB](https://www.fab.com/listings/8427a449-06f0-4c8a-8c1e-dced8dd56f2c)
 
 
 ## How to activate

@@ -2,7 +2,7 @@
 
 # AdvancedEditorUtilities
 Widgets and Utilities to improve your daily workflow in Unreal Engine
-Available on the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US/product/f375645593fc4d909bf8c79b9f64a066)
+Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776eb0e7)
 
 
 ## How to activate

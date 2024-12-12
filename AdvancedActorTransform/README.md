@@ -3,7 +3,7 @@
 # **Advanced Actor Transform - How to setup:**
 Welcome to the updated version of AdvancedActorTransform, if you are looking for the documentation for the older version, it's still mantained in this repository but the first version is deprecated and will no longer be updated or distributed.
 
-- Download AdvancedActorTransform from the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US/product/26fa6336e06b41d2baad1f9308d9019b) and add it to your project
+- Download AdvancedActorTransform from [FAB](https://www.fab.com/listings/f170f0d0-8aa3-4de7-ae93-e8f060ef7003) and add it to your project
 - Feel free to delete the ExampleContent folder in case you don't need it
 - Click a column header of the following table to go to the documentation of the version you need:
 

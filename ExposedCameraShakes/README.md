@@ -1,8 +1,8 @@
 ![Logo](https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/Images/Logo.png)
 
 # Exposed Camera Shakes
-Widgets and Utilities to improve your daily workflow in Unreal Engine
-Available on the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US/product/1f20aaa8b05e43be99c3be67bf5c7745)
+Change the values of your camera shakes at runtime in a few steps without the need of C++
+Available on [FAB](https://www.fab.com/listings/69664d4f-7163-4768-82cf-48b86d9fa859)
 
 
 ## How to activate
@@ -17,3 +17,4 @@ Available on the [Unreal Marketplace](https://unrealengine.com/marketplace/en-US
 ### Open file in windows explorer
 * Create a new camera shake BP that inherits from ExposedDefaultCameraShakeBase
 * Create a new camera shake pattern BP that inherits from ExposedPerlinNoiseCameraShakePattern
+* Look at the example blueprint to see how to interact with the active camera shake
