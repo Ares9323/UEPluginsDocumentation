@@ -38,6 +38,16 @@
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AgX_Tonemapper/README.md">View on GitHub</a></td>
     </tr>
     <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ComponentSorter/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Component Sorter</h3>
+            <p>Automatically sorts the component hierarchy in the Actor and Blueprint editors alphabetically, bringing order to the chaos of randomly arranged components.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/portal/listings/bd2419db-ebae-488b-b241-5eadd8b2f1b1">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ComponentSorter/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
             <h3>Exposed Camera Shakes</h3>
