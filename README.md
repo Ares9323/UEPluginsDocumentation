@@ -28,14 +28,14 @@
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedRestartEditor/README.md">View on GitHub</a></td>
     </tr>
     <tr>
-        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AgX_Tonemapper/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/TonemapperSwapper/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
-            <h3>AgX ToneMapper Swapper</h3>
-            <p>Replace Unreal Engine's default tonemapper with AgX, a color-science-accurate tonemapping algorithm that delivers superior highlight rolloff, natural color handling, and consistent results across exposure ranges.</p>
+            <h3>Tonemapper Swapper</h3>
+            <p>Replace Unreal Engine's default tonemapper with AgX or GT (Uchimura), two color-science-accurate tonemapping algorithms that deliver superior highlight rolloff, natural color handling, and consistent results across exposure ranges.</p>
             <br>
         </td>
         <td><a href="https://www.fab.com/portal/listings/aa0e0734-8877-47d6-9ab7-5d0f719467a2">Buy on FAB</a></td>
-        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AgX_Tonemapper/README.md">View on GitHub</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/TonemapperSwapper/README.md">View on GitHub</a></td>
     </tr>
     <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ComponentSorter/Images/Logo.png" alt="Logo" style="width:100px"></td>
