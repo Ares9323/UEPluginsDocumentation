@@ -42,6 +42,7 @@ StaticMesh12
 
 ## Features
 
+### Automatic Sorting
 - **Automatic sorting** — Components are sorted the moment you select an Actor or open a Blueprint, with no manual intervention required
 - **Natural sort order** — Numbers in component names are compared numerically, not character-by-character
 - **Respects hierarchy** — Parent-child attachment relationships are fully preserved; only sibling components at each level are reordered
@@ -52,3 +53,18 @@ StaticMesh12
 - **Zero configuration** — No settings, no menus, no UI. Install and forget
 - **Case-insensitive** — "audioComponent" and "AudioComponent" sort next to each other
 - **Custom order sorting logic** — Up to 10 presets available from the context menu, infinite possibilities assigning a CustomSort_X integer tag to components
+
+### Replace Component Class
+Right-click any component in the Components panel and select **Replace Component Class...** to swap it with a different component type while preserving shared property values (transform, tags, etc.).
+
+- **Full class picker** — Browse all compatible component classes in a tree view (Scene Components or Actor Components depending on the original type)
+- **Property preservation** — Shared properties are automatically copied from the old component to the new one using `CopyPropertiesForUnrelatedObjects`
+- **Data loss warning** — If the chosen class is not a subclass of the original, a confirmation dialog warns about potential property loss
+- **Children reparenting** — Child components are automatically reparented to the new component
+- **Undo support** — The entire operation is wrapped in a single transaction for easy undo/redo
+
+### Alt+Drag Duplicate (Blueprint Viewport)
+Hold **Alt** and drag a component's transform gizmo in the Blueprint editor viewport to duplicate it — just like Alt+Drag works for Actors in the Level Editor.
+
+- **Gizmo-aware** — Only triggers when clicking on a transform gizmo axis, not when clicking in empty space
+- **Seamless workflow** — The duplicated component is automatically selected so the drag moves the copy, not the original
