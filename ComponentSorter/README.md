@@ -3,7 +3,7 @@
 # ComponentSorter
 Automatically sorts the component hierarchy in the Actor and Blueprint editors alphabetically, bringing order to the chaos of randomly arranged components.
 
-Available on [FAB](https://www.fab.com/portal/listings/bd2419db-ebae-488b-b241-5eadd8b2f1b1)
+Available on [FAB](https://www.fab.com/listings/82fc4b56-9857-4bf9-8b43-cfcb1935280a)
 
 
 ## How to activate on a single project
