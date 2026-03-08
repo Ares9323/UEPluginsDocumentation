@@ -12,4 +12,5 @@ Available on [FAB](https://www.fab.com/portal/listings/db53002f-f4db-491e-b14c-e
 * Restart the editor
 
 ## How to use
+* [WARNING] On Unreal Engine 5.7.3, Spout Media Output capture currently causes a crash. Avoid using Spout Media Output assets on that engine version.
 * This plugin follows the same workflow as Unreal Engine's default media framework, so you can use the Media Player and Media Texture assets to display the Spout feed in your project. You can also use the Spout Media Output asset to send a feed from Unreal Engine to Spout-compatible applications. You can find more information on the [Unreal Engine documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/supporting-multiple-media-configurations-in-unreal-engine/).
