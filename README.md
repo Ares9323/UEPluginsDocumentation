@@ -78,6 +78,16 @@
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/OctaGraph/README.md">View on GitHub</a></td>
     </tr>
     <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SDL_EnhancedInput/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>SDL Enhanced Input</h3>
+            <p>Bridges SDL3 gamepad and joystick input into UE's Enhanced Input system — DualSense adaptive triggers, motion sensors, touchpad, racing wheels, flight sticks, Wiimotes, and more.</p>
+            <br>
+        </td>
+        <td><a href="">Coming soon on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SDL_EnhancedInput/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SpoutMedia/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
             <h3>Spout Media Source & Output</h3>
