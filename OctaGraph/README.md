@@ -79,7 +79,8 @@ OctaGraph propagates wire colors correctly through reroute/knot node chains. In 
 
 ### Auto Connect & Insert
 
-![Auto Connect & Insert](https://github.com/Ares9323/UEPluginsDocumentation/blob/master/OctaGraph/Images/AutoConnectInsert.gif)
+![Auto Connect](https://github.com/Ares9323/UEPluginsDocumentation/blob/master/OctaGraph/Images/AutoConnect.gif)
+![Auto Insert](https://github.com/Ares9323/UEPluginsDocumentation/blob/master/OctaGraph/Images/AutoInsert.gif)
 
 Drag a node near other nodes and compatible pins are automatically connected when you release. These features are reimplemented natively in OctaGraph to work correctly with custom wire styles.
 
