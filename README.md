@@ -97,6 +97,16 @@
         <td><a href="https://www.fab.com/portal/listings/db53002f-f4db-491e-b14c-eab9ef0d7ac3">Buy on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SpoutMedia/README.md">View on GitHub</a></td>
     </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/WidgetDesignerUtilities/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Widget Designer Utilities</h3>
+            <p>Color-coding, batch rename, binding warnings and widget extraction tools for the UMG Widget Designer hierarchy.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/listings/f2c89fbf-cf4e-4cac-99b5-709f29920d2d">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/WidgetDesignerUtilities/README.md">View on GitHub</a></td>
+    </tr>
 </table>
 
 # Ares9323's Unreal Engine Projects & Asset Packs
