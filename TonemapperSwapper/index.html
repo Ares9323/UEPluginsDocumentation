@@ -18,8 +18,38 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   header { padding: 20px 24px 8px; }
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
   header h1 { margin: 0; font-size: 20px; font-weight: 600; }
   header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+  .scenes {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .scene-btn {
+    padding: 6px 12px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .scene-btn:hover { color: var(--text); }
+  .scene-btn.active {
+    background: #2a313a;
+    color: var(--text);
+  }
 
   .layout {
     display: grid;
@@ -116,7 +146,10 @@
 <body>
 
 <header>
-  <h1>TonemapperSwapper — Tonemapper Comparison</h1>
+  <div class="header-row">
+    <h1>TonemapperSwapper — Tonemapper Comparison</h1>
+    <div class="scenes" id="scenes"></div>
+  </div>
   <p>Drag the slider to compare. Use the side panels to switch the image on each half.</p>
 </header>
 
@@ -146,7 +179,12 @@
 </div>
 
 <script>
-  const BASE = "Previewer/CubeScreenshots/";
+  const SCENES = [
+    { id: "cube",  label: "Cube",            folder: "Previewer/CubeScreenshots/" },
+    { id: "dawn",  label: "Landscape Dawn",  folder: "Previewer/LandscapeDawn/"   },
+    { id: "day",   label: "Landscape Day",   folder: "Previewer/LandscapeDay/"    },
+    { id: "night", label: "Landscape Night", folder: "Previewer/LandscapeNight/"  },
+  ];
   const TONEMAPPERS = [
     "Unreal Default (Aces)",
     "AgX Default",
@@ -161,8 +199,9 @@
   ];
 
   const state = {
+    scene: "night",
     left:  "Unreal Default (Aces)",
-    right: "AgX Default",
+    right: "AgX Saturated",
   };
 
   const imgLeft   = document.getElementById("img-left");
@@ -171,7 +210,8 @@
   const labelRight= document.getElementById("label-right");
 
   function urlFor(name) {
-    return BASE + encodeURIComponent(name) + ".png";
+    const scene = SCENES.find(s => s.id === state.scene);
+    return scene.folder + encodeURIComponent(name) + ".png";
   }
 
   function render() {
@@ -184,6 +224,24 @@
     });
     document.querySelectorAll("#buttons-right .btn").forEach(b => {
       b.classList.toggle("active", b.dataset.name === state.right);
+    });
+    document.querySelectorAll("#scenes .scene-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === state.scene);
+    });
+  }
+
+  function buildScenes() {
+    const container = document.getElementById("scenes");
+    SCENES.forEach(scene => {
+      const btn = document.createElement("button");
+      btn.className = "scene-btn";
+      btn.dataset.id = scene.id;
+      btn.textContent = scene.label;
+      btn.addEventListener("click", () => {
+        state.scene = scene.id;
+        render();
+      });
+      container.appendChild(btn);
     });
   }
 
@@ -202,6 +260,7 @@
     });
   }
 
+  buildScenes();
   buildButtons("buttons-left",  "left");
   buildButtons("buttons-right", "right");
   render();
