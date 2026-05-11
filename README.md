@@ -107,6 +107,16 @@
         <td><a href="https://www.fab.com/listings/f2c89fbf-cf4e-4cac-99b5-709f29920d2d">Buy on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/WidgetDesignerUtilities/README.md">View on GitHub</a></td>
     </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ViewportActorWidgets/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Viewport Actor Widgets</h3>
+            <p>Pin interactive UMG widgets to your actors directly in the editor viewport. Build per-actor property panels, action buttons, and live status displays — all in UMG, no Slate or editor-module C++.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/listings/bdcc831b-28ce-47b0-8b23-79941a080c2d">Coming soon on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ViewportActorWidgets/README.md">View on GitHub</a></td>
+    </tr>
 </table>
 
 # Ares9323's Unreal Engine Projects & Asset Packs
