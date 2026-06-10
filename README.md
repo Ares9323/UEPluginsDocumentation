@@ -8,23 +8,13 @@
         <th>Documentation</th>
     </tr>
     <tr>
-        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedActorTransform/Images/Logo.png" alt="Logo" style="width:100px"></td>
-        <td>
-            <h3>Advanced Actor Transform</h3>
-            <p>Animate a large number of actors in a few clicks!</p>
-            <br>
-        </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/26fa6336e06b41d2baad1f9308d9019b">Buy on the Unreal Marketplace</a></td>
-        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedActorTransform/README.md">View on GitHub</a></td>
-    </tr>
-    <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedEditorUtilities/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
             <h3>Advanced Editor Utilities</h3>
             <p>Editor utilities to improve your daily workflow</p>
             <br>
         </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/f375645593fc4d909bf8c79b9f64a066">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776eb0e7">Buy on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedEditorUtilities/README.md">View on GitHub</a></td>
     </tr>
     <tr>
@@ -34,8 +24,28 @@
             <p>Utility to restart the Unreal Editor with a click or with a shortcut</p>
             <br>
         </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/dbe5d2a00fa541b2917ae5c987ff5d62">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://www.fab.com/listings/2c59b825-08fc-45bb-94cb-3413bb7ba8af">Free on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedRestartEditor/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/TonemapperSwapper/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Tonemapper Swapper</h3>
+            <p>Replace Unreal Engine's default tonemapper with AgX or GT (Uchimura), two color-science-accurate tonemapping algorithms that deliver superior highlight rolloff, natural color handling, and consistent results across exposure ranges.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/portal/listings/aa0e0734-8877-47d6-9ab7-5d0f719467a2">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/TonemapperSwapper/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ComponentSorter/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Component Sorter</h3>
+            <p>Automatically sorts the component hierarchy in the Actor and Blueprint editors alphabetically, bringing order to the chaos of randomly arranged components.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/portal/listings/bd2419db-ebae-488b-b241-5eadd8b2f1b1">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ComponentSorter/README.md">View on GitHub</a></td>
     </tr>
     <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/Images/Logo.png" alt="Logo" style="width:100px"></td>
@@ -44,7 +54,7 @@
             <p>Change the values of your camera shakes at runtime in a few steps without the need of C++</p>
             <br>
         </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/1f20aaa8b05e43be99c3be67bf5c7745">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://www.fab.com/listings/69664d4f-7163-4768-82cf-48b86d9fa859">Buy on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ExposedCameraShakes/README.md">View on GitHub</a></td>
     </tr>
     <tr>
@@ -54,8 +64,48 @@
             <p>Add your favourite levels to an easily accessible dropdown menu in the toolbar</p>
             <br>
         </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/b4a88d66c795480fb803a0f4f8b1907e">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://www.fab.com/listings/8427a449-06f0-4c8a-8c1e-dced8dd56f2c">Free on FAB</a></td>
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/LevelBookmarks/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SDL_EnhancedInput/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>SDL Enhanced Input</h3>
+            <p>Bridges SDL3 gamepad and joystick input into UE's Enhanced Input system — DualSense adaptive triggers, motion sensors, touchpad, racing wheels, flight sticks, Wiimotes, and more.</p>
+            <br>
+        </td>
+        <td><a href="">Coming soon on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SDL_EnhancedInput/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SpoutMedia/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Spout Media Source & Output</h3>
+            <p>Spout2 Media Sources and Media Outputs implemented with the native Media Source and Output system.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/portal/listings/db53002f-f4db-491e-b14c-eab9ef0d7ac3">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SpoutMedia/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/WidgetDesignerUtilities/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Widget Designer Utilities</h3>
+            <p>Color-coding, batch rename, binding warnings and widget extraction tools for the UMG Widget Designer hierarchy.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/listings/f2c89fbf-cf4e-4cac-99b5-709f29920d2d">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/WidgetDesignerUtilities/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ViewportActorWidgets/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Viewport Actor Widgets</h3>
+            <p>Pin interactive UMG widgets to your actors directly in the editor viewport. Build per-actor property panels, action buttons, and live status displays — all in UMG, no Slate or editor-module C++.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/listings/bdcc831b-28ce-47b0-8b23-79941a080c2d">Coming soon on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/ViewportActorWidgets/README.md">View on GitHub</a></td>
     </tr>
 </table>
 
@@ -68,6 +118,16 @@
         <th>Marketplace Link</th>
         <th>Documentation</th>
     </tr>
+        <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedActorTransform/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>Advanced Actor Transform</h3>
+            <p>Animate a large number of actors in a few clicks!</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/listings/f170f0d0-8aa3-4de7-ae93-e8f060ef7003">Free on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AdvancedActorTransform/README.md">View on GitHub</a></td>
+    </tr>
     <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/RomanMosaicTexturePack/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
@@ -75,7 +135,7 @@
             <p>Roman Mosaic Tiles Textures, photo-scanned from Italian churches</p>
             <br>
         </td>
-        <td><a href="https://unrealengine.com/marketplace/en-US/product/0b8a4ffacf3f4c70b0576dd658de7996">Buy on the Unreal Marketplace</a></td>
+        <td><a href="https://www.fab.com/listings/df9b0949-537d-479e-977b-716fbedc4302">Buy on FAB</a></td>
         <td>N/A</td>
     </tr>
 </table>
