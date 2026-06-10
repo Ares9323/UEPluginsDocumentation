@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TonemapperSwapper — Before / After Comparison</title>
+<script type="module" src="https://unpkg.com/img-comparison-slider@8/dist/index.js"></script>
+<style>
+  :root {
+    --bg: #111418;
+    --panel: #1a1f25;
+    --border: #2a313a;
+    --text: #e6e8eb;
+    --muted: #8a93a0;
+    --accent-left: #4aa3ff;
+    --accent-right: #ff8a3d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 20px 24px 8px; }
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+  .scenes {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .scene-btn {
+    padding: 6px 12px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .scene-btn:hover { color: var(--text); }
+  .scene-btn.active {
+    background: #2a313a;
+    color: var(--text);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    gap: 16px;
+    padding: 16px 24px 24px;
+    align-items: start;
+  }
+
+  .side {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    position: sticky;
+    top: 16px;
+  }
+  .side h2 {
+    margin: 0 0 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .side.left h2 { color: var(--accent-left); }
+  .side.right h2 { color: var(--accent-right); }
+
+  .btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms;
+  }
+  .btn:hover { background: #232a32; }
+  .side.left .btn.active {
+    border-color: var(--accent-left);
+    background: rgba(74, 163, 255, 0.12);
+  }
+  .side.right .btn.active {
+    border-color: var(--accent-right);
+    background: rgba(255, 138, 61, 0.12);
+  }
+
+  .stage {
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  img-comparison-slider {
+    --divider-color: #ffffff;
+    --divider-width: 2px;
+    --default-handle-opacity: 1;
+    width: 100%;
+    display: block;
+  }
+  img-comparison-slider img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -1px;
+  }
+  .legend .l { color: var(--accent-left); }
+  .legend .r { color: var(--accent-right); }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: 1fr; }
+    .side { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <h1>TonemapperSwapper — Tonemapper Comparison</h1>
+    <div class="scenes" id="scenes"></div>
+  </div>
+  <p>Drag the slider to compare. Use the side panels to switch the image on each half.</p>
+</header>
+
+<div class="layout">
+  <aside class="side left">
+    <h2>Left (before)</h2>
+    <div id="buttons-left"></div>
+  </aside>
+
+  <main>
+    <div class="stage">
+      <img-comparison-slider id="slider">
+        <img id="img-left"  slot="first"  alt="left tonemapper"  />
+        <img id="img-right" slot="second" alt="right tonemapper" />
+      </img-comparison-slider>
+    </div>
+    <div class="legend">
+      <span class="l" id="label-left">—</span>
+      <span class="r" id="label-right">—</span>
+    </div>
+  </main>
+
+  <aside class="side right">
+    <h2>Right (after)</h2>
+    <div id="buttons-right"></div>
+  </aside>
+</div>
+
+<script>
+  const SCENES = [
+    { id: "cube",  label: "Cube",            folder: "Previewer/CubeScreenshots/" },
+    { id: "dawn",  label: "Landscape Dawn",  folder: "Previewer/LandscapeDawn/"   },
+    { id: "day",   label: "Landscape Day",   folder: "Previewer/LandscapeDay/"    },
+    { id: "night", label: "Landscape Night", folder: "Previewer/LandscapeNight/"  },
+  ];
+  const TONEMAPPERS = [
+    "Unreal Default (Aces)",
+    "AgX Default",
+    "AgX Saturated",
+    "GT Default",
+    "GT HighContrast",
+    "Hable Uncharted 2",
+    "Hejl-Burgess-Dawson",
+    "Linear (no tonemap)",
+    "Reinhard Default",
+    "Reinhard Filmic",
+  ];
+
+  const state = {
+    scene: "night",
+    left:  "Unreal Default (Aces)",
+    right: "AgX Saturated",
+  };
+
+  const imgLeft   = document.getElementById("img-left");
+  const imgRight  = document.getElementById("img-right");
+  const labelLeft = document.getElementById("label-left");
+  const labelRight= document.getElementById("label-right");
+
+  function urlFor(name) {
+    const scene = SCENES.find(s => s.id === state.scene);
+    return scene.folder + encodeURIComponent(name) + ".png";
+  }
+
+  function render() {
+    imgLeft.src   = urlFor(state.left);
+    imgRight.src  = urlFor(state.right);
+    labelLeft.textContent  = state.left;
+    labelRight.textContent = state.right;
+    document.querySelectorAll("#buttons-left .btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.name === state.left);
+    });
+    document.querySelectorAll("#buttons-right .btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.name === state.right);
+    });
+    document.querySelectorAll("#scenes .scene-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === state.scene);
+    });
+  }
+
+  function buildScenes() {
+    const container = document.getElementById("scenes");
+    SCENES.forEach(scene => {
+      const btn = document.createElement("button");
+      btn.className = "scene-btn";
+      btn.dataset.id = scene.id;
+      btn.textContent = scene.label;
+      btn.addEventListener("click", () => {
+        state.scene = scene.id;
+        render();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function buildButtons(containerId, side) {
+    const container = document.getElementById(containerId);
+    TONEMAPPERS.forEach(name => {
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.dataset.name = name;
+      btn.textContent = name;
+      btn.addEventListener("click", () => {
+        state[side] = name;
+        render();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  buildScenes();
+  buildButtons("buttons-left",  "left");
+  buildButtons("buttons-right", "right");
+  render();
+</script>
+
+</body>
+</html>
