@@ -23,6 +23,33 @@ All settings are in **Edit > Project Settings > Plugins > SDL Enhanced Input**.
 
 ---
 
+## Xbox Controllers & Duplicate Input
+
+On **Windows**, Unreal's built-in **XInput Device** plugin (enabled by default in UE5) reads Xbox-compatible controllers, and so does this plugin. Both feed the same standard gamepad keys, so an Xbox pad can register **every press twice** (for example, double menu navigation). PlayStation, Switch, and other controllers are **not** affected, because the engine's XInput only handles Xbox-compatible devices.
+
+When the plugin detects an Xbox controller while the XInput Device plugin is still enabled, it shows a **one-time dialog in the editor** with three choices. It never appears again once you pick one, and never appears for non-Xbox controllers:
+
+| Choice | Effect | Restart? |
+|--------|--------|----------|
+| **Disable XInput plugin** *(recommended)* | Turns off the engine's XInput Device plugin so SDL handles the Xbox pad fully, including extras XInput can't expose (Guide button, paddles, motion, advanced rumble), plus more than 4 controllers. Edits the project's `.uproject`. | Yes |
+| **Remove duplicates** | Keeps the engine XInput plugin; SDL emits only the extras (Guide, paddles, Misc, motion) for Xbox pads and lets XInput provide the standard buttons/axes. | No |
+| **Ignore** | Accept the duplicate input and don't ask again. | No |
+
+You can change this anytime in **Project Settings > Plugins > SDL Enhanced Input > Xbox / XInput**.
+
+### Doing it manually
+
+To resolve it yourself, disable Unreal's XInput plugin:
+
+1. **Edit > Plugins**
+2. Search for **XInput Device**
+3. Uncheck it
+4. Restart the editor
+
+This is the recommended setup when you want SDL Enhanced Input to be the single source of controller input.
+
+---
+
 ## Supported Devices
 
 | Device | Features |
@@ -439,7 +466,10 @@ The plugin includes 160+ example assets to get you started:
 ## FAQ
 
 **Does this replace UE's built-in input?**
-No. The plugin registers alongside UE's native input devices. Standard gamepad buttons map to `FGamepadKeyNames`, so existing Input Actions work unchanged. The plugin adds new FKeys for features UE doesn't expose.
+No. The plugin registers alongside UE's native input devices. Standard gamepad buttons map to `FGamepadKeyNames`, so existing Input Actions work unchanged. The plugin adds new FKeys for features UE doesn't expose. (On Windows, this overlap means Xbox pads can produce duplicate input. See [Xbox Controllers & Duplicate Input](#xbox-controllers--duplicate-input).)
+
+**Why does my Xbox controller register every input twice?**
+On Windows, Unreal's built-in XInput Device plugin reads Xbox pads in parallel with this plugin. Pick a resolution from the one-time editor dialog, or see [Xbox Controllers & Duplicate Input](#xbox-controllers--duplicate-input). PlayStation, Switch, and other controllers are not affected.
 
 **Does this modify engine files?**
 No. SDL3 is loaded as a dynamic library at runtime.
@@ -457,4 +487,4 @@ Not currently. Wiimote uses Windows Bluetooth APIs and direct HID. The rest of t
 Yes. Use `SDL.SimButton` and `SDL.SimAxis` to simulate a virtual joystick with 24 buttons and 8 axes.
 
 **What happens if I uninstall the plugin?**
-Nothing breaks. The plugin doesn't modify any engine files, project settings, or saved data. Input Actions referencing custom FKeys will simply stop receiving input.
+Nothing breaks. The plugin doesn't modify engine files. Input Actions referencing custom FKeys will simply stop receiving input. The only project change it can make is optional and user-initiated: if you chose "Disable XInput plugin" from the Xbox duplicate-input prompt, that setting lives in your `.uproject` — re-enable **XInput Device** in **Edit > Plugins** if you want UE's native Xbox input back.
