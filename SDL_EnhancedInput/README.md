@@ -50,6 +50,44 @@ This is the recommended setup when you want SDL Enhanced Input to be the single 
 
 ---
 
+## CommonUI Button Prompts
+
+The plugin integrates with **CommonUI** so on-screen button prompts show the right icons per controller (PlayStation, Xbox, Switch, keyboard). The runtime emits a distinct **Hardware Device Identifier** per controller type (`SDLGamepad_PS5`, `SDLGamepad_XboxOne`, `SDLGamepad_SwitchPro`, ...), which CommonUI matches against a controller-data asset's **Gamepad Hardware Id Mapping**.
+
+Ready-made presets are included in `Content/ExampleContent/UI/CommonUI/ControllerData/` (`CIBCD_PS4/PS5/XBOX_One/XBOX_360/SwitchPro/MouseKeyboard`, plus icon-less scaffolds under `EmptyPresets/` for PS3/GameCube/Joy-Cons and the generic `SDL_Gamepad`/`SDL_Joystick`).
+
+### Setup
+
+1. Enable the **CommonUI** plugin (**Edit > Plugins**), then restart.
+2. Register the presets under **Project Settings > Common Input Settings > Controller Data**, or in `Config/DefaultGame.ini`:
+   ```ini
+   [CommonInputPlatformSettings_Windows CommonInputPlatformSettings]
+   +ControllerData=/SDL_EnhancedInput/ExampleContent/UI/CommonUI/ControllerData/CIBCD_MouseKeyboard.CIBCD_MouseKeyboard_C
+   +ControllerData=/SDL_EnhancedInput/ExampleContent/UI/CommonUI/ControllerData/CIBCD_PS5.CIBCD_PS5_C
+   +ControllerData=/SDL_EnhancedInput/ExampleContent/UI/CommonUI/ControllerData/CIBCD_XBOX_One.CIBCD_XBOX_One_C
+   ; ...add one line per preset you use
+   ```
+3. **Enable Enhanced Input Support**: **Project Settings > Common Input Settings > Enable Enhanced Input Support** = `true`, then **restart the editor** (the setting is read once at startup). Until you do, the **Enhanced Input Action** field stays hidden on `CommonActionWidget`.
+4. On each `CommonActionWidget`, assign the **Enhanced Input Action** directly in the details panel (no Blueprint nodes needed). The legacy `CommonInputActionDataBase` DataTable is not needed with Enhanced Input.
+
+### Flight sticks & raw joysticks
+
+Moving a joystick **axis** switches CommonUI's input type, so a stick user sees the UI react on movement, not only on button presses (raw analog alone does not trigger the switch; the plugin emits a hidden detection key on axis movement, the same way the engine does for gamepad thumbsticks).
+
+To show icons for a raw stick, its controller-data preset must be keyed by the **standard `Gamepad_*` keys** your Input Actions resolve to (for example `Gamepad_FaceButton_Bottom`), **not** by `SDLJoystick_Button*`.
+
+### How the icon is chosen (important)
+
+CommonUI shows the icon of an action's **first gamepad key** for the **current controller**, not the physical key you pressed, and it distinguishes only Mouse / Gamepad / Touch (not the specific gamepad model). Practical rules:
+
+- Key every preset (including a stick's) by the same standard `Gamepad_*` keys the actions use; that value is what each preset translates into its own icon.
+- Keep the `Gamepad_*` mappings **before** the `SDLJoystick_*` ones in your IMC, so all controllers resolve on the standard key.
+- Symptom of mis-keying: icons **disappear** on one controller and come back on another (the active preset has no brush for the resolved key).
+
+<!-- Screenshot: CommonUI button prompts switching per controller -->
+
+---
+
 ## Supported Devices
 
 | Device | Features |
@@ -238,6 +276,23 @@ Simulate controller input without physical hardware using console commands. Usef
 
 ---
 
+### Raw Joystick Deadzone
+
+A dedicated deadzone for raw joysticks (flight sticks, arcade sticks, wheels), applied as a hard cutoff on the `SDLJoystick_Axis*` values. It does **not** affect gamepads (Xbox / PlayStation / Switch), which SDL already deadzones internally.
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Joystick Deadzone | 0.02 | Hard-cutoff deadzone for raw joystick axes (0.0-0.9) |
+
+Can also be read and changed per-player at runtime from Blueprint:
+
+| Function | Description |
+|----------|-------------|
+| `GetJoystickDeadzone` | Current raw-joystick deadzone |
+| `SetJoystickDeadzone` | Override the raw-joystick deadzone at runtime |
+
+---
+
 ### Multi-Controller
 
 Supports up to 8 gamepads and 4 raw joysticks simultaneously.
@@ -349,19 +404,32 @@ All hints use a tristate value: **Default** (let SDL decide), **Enabled**, or **
 
 ## Example Content
 
-The plugin includes 160+ example assets to get you started:
+The plugin includes 400+ example assets to get you started:
 
 ### Input Actions & Mapping Contexts
 
 | Asset | Description |
 |-------|-------------|
+| `IMC_SDL_Shared` | Cross-device Move / Look (works on gamepad and raw stick) |
 | `IMC_SDL_Gamepad` | Standard gamepad (sticks, triggers, buttons, D-pad, shoulders) |
+| `IMC_SDL_Joystick` | Raw joystick (8 axes, 24 buttons) |
+| `IMC_SDL_GamepadAndJoystick` | Combined gamepad + raw joystick bindings in one context |
 | `IMC_SDL_Motion` | Accelerometer + gyroscope (3 axes each) |
 | `IMC_SDL_Touchpad` | Two-finger touch + click |
 | `IMC_SDL_Wiimote` | Wiimote buttons + IR dots (reuses gamepad IAs) |
-| `IMC_SDL_Joystick` | Raw joystick (8 axes, 24 buttons) |
 
-40+ Input Actions are pre-configured covering every input type.
+70+ Input Actions are pre-configured covering every input type.
+
+### CommonUI Controller Data
+
+| Asset | Description |
+|-------|-------------|
+| `CIBCD_PS4` / `PS5` / `XBOX_One` / `XBOX_360` / `SwitchPro` | Controller-data presets with button icons, wired to SDL's per-type identifiers |
+| `CIBCD_MouseKeyboard` | Keyboard & mouse prompt set |
+| `CIBCD_PS3` / `GameCube` / `JoyConLeft` / `JoyConRight` / `JoyConPair` | Icon-less scaffolds under `EmptyPresets/` (mapping pre-filled, drop in your own icons) |
+| `CIBCD_SDL_Gamepad` / `CIBCD_SDL_Joystick` | Generic icon-less scaffolds for unbranded gamepads / raw sticks |
+
+See [CommonUI Button Prompts](#commonui-button-prompts) for setup.
 
 ### Blueprints
 
@@ -379,7 +447,8 @@ The plugin includes 160+ example assets to get you started:
 
 | Widget | Description |
 |--------|-------------|
-| `WBP_SLD_UI` | Main debug panel with full controller status |
+| `WBP_SDL_UI` | Main debug panel with full controller status |
+| `WBP_UI_InputTest` | CommonUI input-test panel (button prompts per controller) |
 | `WBP_AxisVisualizer` | Axis bar display |
 | `WBP_ButtonVisualizer` | Button state indicator |
 | `WBP_HatVisualizer` | D-pad / hat visualizer |
@@ -460,6 +529,8 @@ The plugin includes 160+ example assets to get you started:
 | Function | Description |
 |----------|-------------|
 | `SetSDLHint(Name, Value)` | Set SDL hint at runtime |
+| `GetJoystickDeadzone()` | Current raw-joystick deadzone |
+| `SetJoystickDeadzone(Deadzone)` | Override raw-joystick deadzone at runtime |
 
 ---
 
@@ -470,6 +541,9 @@ No. The plugin registers alongside UE's native input devices. Standard gamepad b
 
 **Why does my Xbox controller register every input twice?**
 On Windows, Unreal's built-in XInput Device plugin reads Xbox pads in parallel with this plugin. Pick a resolution from the one-time editor dialog, or see [Xbox Controllers & Duplicate Input](#xbox-controllers--duplicate-input). PlayStation, Switch, and other controllers are not affected.
+
+**How do I show controller-specific button prompts (PlayStation / Xbox / Switch icons)?**
+Enable **CommonUI**, register the included controller-data presets, and turn on **Enable Enhanced Input Support**. See [CommonUI Button Prompts](#commonui-button-prompts). If prompts disappear when switching controllers, the active preset is keyed by the wrong keys — see the icon-resolution notes in that section.
 
 **Does this modify engine files?**
 No. SDL3 is loaded as a dynamic library at runtime.
