@@ -6,6 +6,8 @@ Bridges SDL3 gamepad and joystick input into Unreal Engine's Enhanced Input syst
 
 Available on [FAB](https://www.fab.com/)
 
+**Platforms:** Windows and macOS. The SDL3 binaries for both ship with the plugin. The Wiimote features and the Logitech wheel RPM LEDs are Windows only, because they use Windows Bluetooth and HID APIs directly.
+
 ---
 
 ## Installation
@@ -266,13 +268,22 @@ Query device metadata at runtime.
 
 ### Virtual Joystick
 
-Simulate controller input without physical hardware using console commands. Useful for testing all 24 buttons and 8 axes.
+Simulate controller input without physical hardware using console commands. Useful for testing all 24 buttons, 8 axes and 4 hats.
+
+The virtual device is a **raw joystick**, so its input arrives on the `SDLJoystick_Button*`, `SDLJoystick_Axis*` and `SDLJoystick_Hat*` keys, not on the standard gamepad keys. It occupies one of the four raw joystick slots until `SDL.SimDestroy`.
+
+Indices are the same ones used by the key names, so `SDL.SimButton 0` drives `SDLJoystick_Button0`.
 
 | Command | Description |
 |---------|-------------|
-| `SDL.SimButton <index> [0\|1]` | Press/release a button (1-24), toggle if no value |
-| `SDL.SimAxis <index> <value>` | Set an axis value (1-8, range -1.0 to 1.0) |
+| `SDL.SimButton <index> [0\|1]` | Press/release a button (0-23), toggle if no value |
+| `SDL.SimAxis <index> <value>` | Set an axis value (0-7, range -1.0 to 1.0) |
+| `SDL.SimHat <index> <direction>` | Set a hat position (0-3). Direction is `center`, `up`, `down`, `left`, `right`, `upleft`, `upright`, `downleft`, `downright`, or a raw bitmask |
+| `SDL.SimTap <index> [count]` | Fire `count` press+release cycles on a button (default 3), all inside a single frame |
+| `SDL.SimTapHat <index> <direction> [count]` | Same as above for a hat |
 | `SDL.SimDestroy` | Remove the virtual joystick |
+
+`SimTap` and `SimTapHat` exist to reproduce what a controller does at low frame rates, when several taps land between two input polls. Normal presses are delivered even if they start and end inside one frame, and these commands are the quickest way to verify it: each cycle must produce its own press and release, not a single one.
 
 ---
 
@@ -369,8 +380,11 @@ All custom FKeys are registered at startup and available in Input Mapping Contex
 | `SDL.Haptic <type> [str] [dur] [slot]` | `SDL.Haptic Sine 0.8 500` | Play haptic effect |
 | `SDL.HapticInfo [slot]` | `SDL.HapticInfo 0` | Show haptic capabilities |
 | `SDL.SetWheelLED <pattern> [slot]` | `SDL.SetWheelLED 15` | Logitech wheel RPM LEDs |
-| `SDL.SimButton <idx> [0\|1]` | `SDL.SimButton 1` | Simulate virtual joystick button |
-| `SDL.SimAxis <idx> <value>` | `SDL.SimAxis 1 0.5` | Simulate virtual joystick axis |
+| `SDL.SimButton <idx> [0\|1]` | `SDL.SimButton 0` | Simulate virtual joystick button |
+| `SDL.SimAxis <idx> <value>` | `SDL.SimAxis 0 0.5` | Simulate virtual joystick axis |
+| `SDL.SimHat <idx> <direction>` | `SDL.SimHat 0 upleft` | Simulate virtual joystick hat |
+| `SDL.SimTap <idx> [count]` | `SDL.SimTap 0 3` | Button taps inside a single frame |
+| `SDL.SimTapHat <idx> <dir> [count]` | `SDL.SimTapHat 0 up 3` | Hat taps inside a single frame |
 | `SDL.SimDestroy` | `SDL.SimDestroy` | Destroy virtual joystick |
 
 ---
@@ -554,11 +568,14 @@ Yes. Up to 8 gamepads and 4 raw joysticks, each assigned to a separate player sl
 **Do I need to configure SDL driver hints?**
 No. The defaults work for most controllers. The hints are for edge cases like forcing a specific driver for niche hardware.
 
-**Does the Wiimote work on macOS or Linux?**
-Not currently. Wiimote uses Windows Bluetooth APIs and direct HID. The rest of the plugin could support other platforms when SDL3 builds are provided.
+**Which platforms are supported?**
+Windows and macOS. The SDL3 binaries for both ship with the plugin, so no extra setup is needed.
+
+**Does the Wiimote work on macOS?**
+No. The Wiimote features rely on Windows Bluetooth and HID APIs, so they are Windows only. Everything else (gamepads, raw joysticks, motion, touchpad, haptics, LEDs) works on both platforms. The same applies to the Logitech wheel RPM LEDs, which also go through direct HID.
 
 **Can I test without a physical controller?**
-Yes. Use `SDL.SimButton` and `SDL.SimAxis` to simulate a virtual joystick with 24 buttons and 8 axes.
+Yes. Use `SDL.SimButton`, `SDL.SimAxis` and `SDL.SimHat` to simulate a virtual joystick with 24 buttons, 8 axes and 4 hats. `SDL.SimTap` additionally fires several press+release cycles inside a single frame, which is what a real controller produces at low frame rates.
 
 **What happens if I uninstall the plugin?**
 Nothing breaks. The plugin doesn't modify engine files. Input Actions referencing custom FKeys will simply stop receiving input. The only project change it can make is optional and user-initiated: if you chose "Disable XInput plugin" from the Xbox duplicate-input prompt, that setting lives in your `.uproject` — re-enable **XInput Device** in **Edit > Plugins** if you want UE's native Xbox input back.
