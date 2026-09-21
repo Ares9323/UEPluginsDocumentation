@@ -82,7 +82,7 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 ### Toolbar Dropdown Sections
 The AEU toolbar dropdown button is organized into labeled sections:
 * **Tab Restore**: Restore Saved Tab Group, Save Open Tabs As Tab Group
-* **Tools**: World Locker, Image Resizer, View Modes, Console Commands, Material Parameters (each opens as a dockable tab, and each has its own switch in Menus & Toolbars for anyone who already has these panels inside their own utility widget; the tabs stay reachable from the Window menu either way)
+* **Tools**: World Locker, Image Resizer, Material Parameters (each opens as a dockable tab, and each has its own switch in Menus & Toolbars for anyone who already has these panels inside their own utility widget; the tabs stay reachable from the Window menu either way)
 * **Find In Blueprints**: dynamic entries from your Common Strings, each launching a "Find In Blueprints" search for that tag. Every entry is marked with a dot in the colour configured for that tag, the same one its comment nodes get, so the dropdown doubles as their legend (the Common String Comment picker, Shift + Alt + C, shows the same dots)
 
 The `Tools` main menu also gains an **Advanced Editor Utilities** section with the **Starship Style Gallery** (browse every editor icon, brush, color and style, handy when building your own tools).
@@ -90,7 +90,7 @@ The `Tools` main menu also gains an **Advanced Editor Utilities** section with t
 ---
 
 ## View Modes and Console Commands panels
-Both panels exist as tabs of the main widget and as standalone dockable windows (toolbar dropdown > Tools). They are native Slate panels built from the entries configured in the plugin settings.
+Both panels exist as tabs of the main widget and as standalone dockable windows, opened from the Window menu or from a shortcut you bind to them in `Editor Preferences > Keyboard Shortcuts`. They are native Slate panels built from the entries configured in the plugin settings.
 
 ### View Modes
 * Click any button to change the current Viewport Mode; click the highlighted one again to go back to the default view mode ("Lit" by default, configurable). The list includes every engine view mode plus the visualization sub-targets (buffer visualization, Nanite, Lumen, Virtual Shadow Maps, and so on), aligned with the engine version you are running.
@@ -116,7 +116,7 @@ Both panels exist as tabs of the main widget and as standalone dockable windows 
 A dockable window (toolbar dropdown > Tools > **Material Parameters**) listing the materials used by the **selected actors**, with the parameters of every Material Instance editable in place. Like the View Modes and Console Commands panels it is also a UMG widget, under the **Advanced Editor Utilities** palette category, so you can drop it into an Editor Utility Widget of your own. It follows the viewport selection, so it is the fastest way to tweak a scene without opening one Material Instance editor per object.
 
 * Parameters keep the **order the material declares them in**, grouped by their authored groups; the parameters a material left ungrouped end up in "Global". Alphabetical sorting would scramble the "01 - BaseColor / 02 - Textures" layouts materials are usually authored with.
-* Each row has the **override checkbox** of the Material Instance editor, the value editor for its type (scalar slider, colour swatch, texture picker, static switch...) and a **reset arrow** shown only while the instance overrides its parent.
+* Each row has the **override checkbox** of the Material Instance editor, the value editor for its type and a **reset arrow** shown only while the instance overrides its parent. Every type a Material Instance can override is covered: scalar slider, colour swatch, double vector (four boxes, since it carries positions and scales a colour picker would clamp), texture, texture collection, font and its page, runtime virtual texture, sparse volume texture, static switch and static component mask (four channel checkboxes). Texture collections need Unreal 5.5, sparse volume textures 5.3.
 * One **search box** at the top filters the parameters of every material at once. Next to it, two buttons fold or unfold **General** and **Used by** across all of them; both start folded.
 * **Used by** lists every actor, component and material slot of the selection using that material, and clicking one selects that actor alone.
 * **General** is the instance's physical material, Lightmass settings and base property overrides, shown with the engine's own editors.
