@@ -17,6 +17,8 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 * [Main widget and toolbar](#main-widget-and-toolbar)
 * [View Modes and Console Commands panels](#view-modes-and-console-commands-panels)
 * [Material Parameters panel](#material-parameters-panel)
+* [Create PBR Textures](#create-pbr-textures)
+* [Make Seamless](#make-seamless)
 * [Graph editor tools](#graph-editor-tools)
 * [Editor settings](#editor-settings)
 * [Naming Convention](#naming-convention)
@@ -80,7 +82,7 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 ### Toolbar Dropdown Sections
 The AEU toolbar dropdown button is organized into labeled sections:
 * **Tab Restore**: Restore Saved Tab Group, Save Open Tabs As Tab Group
-* **Tools**: World Locker, Image Resizer, View Modes, Console Commands, Material Parameters (each opens as a dockable tab)
+* **Tools**: World Locker, Image Resizer, View Modes, Console Commands, Material Parameters (each opens as a dockable tab, and each has its own switch in Menus & Toolbars for anyone who already has these panels inside their own utility widget; the tabs stay reachable from the Window menu either way)
 * **Find In Blueprints**: dynamic entries from your Common Strings, each launching a "Find In Blueprints" search for that tag. Every entry is marked with a dot in the colour configured for that tag, the same one its comment nodes get, so the dropdown doubles as their legend (the Common String Comment picker, Shift + Alt + C, shows the same dots)
 
 The `Tools` main menu also gains an **Advanced Editor Utilities** section with the **Starship Style Gallery** (browse every editor icon, brush, color and style, handy when building your own tools).
@@ -140,6 +142,54 @@ Two settings live in `Editor Preferences > Advanced Editor Utilities > Advanced 
 
 ---
 
+## Create PBR Textures
+Right-click a colour texture and pick **Create PBR Textures...**, or open the panel from `Window` and drop a texture on it. The panel shows the source beside the maps estimated from it, framed together, each with its own parameters underneath.
+
+Everything here is a guess read out of the luminance of the source: a normal from its gradient, an occlusion from the horizon around each pixel, a roughness from local contrast, an albedo from flattening the light the photo baked in. They are not measurements, and no colour image carries the information a scanner would give you. Good enough to block out a material or to rescue a texture that came with nothing else, not a replacement for authored maps.
+
+* The source has to be a **colour texture**. Anything whose name ends with a suffix from the ignore list, or that is compressed as a normal map, a mask or a grayscale, is left out of the picker and out of the menu entirely, rather than silently producing a normal of a normal.
+* Tick the maps you want: **Normal**, **Roughness**, **Ambient Occlusion**, **Metallic**, **ORM**, **Albedo**, **Height**, **Edge**. Each becomes a column, in a fixed order so a column never moves when another is switched off.
+* **ORM (packed)** puts occlusion in red, roughness in green and metallic in blue. While it is on, those three maps are switched off on their own: shipping both the packed texture and its three halves is what packing them was meant to avoid.
+* Zoom with the wheel, pan by dragging, double click to frame it all. Every column shows the same crop, which is the only way to compare them.
+* Each column has its own **Resolution** for the file it writes, from the source's size down to 128, and its own Create button. An existing map with that name is rewritten in place, so the materials pointing at it keep working.
+* **Realtime update** (off by default) re-estimates while a slider is dragged instead of when it is released.
+
+### Bringing your own maps
+`Height in` and `Normal in` take a height or a normal you already have, and they are worth more than every estimator in the panel: an occlusion or a curvature read off a real normal is a calculation, the same thing read off an invented one is only plausible. With a height supplied the bands below are bypassed; with a normal supplied and no height, the height is recovered from it by integrating its gradients.
+
+### The maps
+| Map | What it reads | Notes |
+|---|---|---|
+| **Height** | Five bands of detail, an octave apart, each with its own weight (fine, small, medium, large, base) | This is the relief every other map is read from. Base at zero keeps the shapes and throws away the slow shading, which on a photo is usually light and not form |
+| **Normal** | The gradient of that height | Strength is exponential: the useful range on a soft surface is under 1 and on a carved one is in the tens |
+| **Ambient Occlusion** | Eight horizons traced around each pixel over the height | Not "this pixel is darker than its neighbours": a dark speck painted on a flat surface has no horizon above it and stays unoccluded |
+| **Roughness** | Local contrast around a base value | |
+| **Metallic** | How close each pixel is to a colour you pick with the eyedropper, measured in hue, saturation and value | Metal cannot be read out of brightness: a metal band and a pale stripe of paint look the same to a luminance estimator |
+| **Albedo** | The source with its illumination flattened | Handles a gradient, not a hard shadow |
+| **Edge** | Curvature of the normal field | Bright on convex edges, dark in crevices, grey where flat: the mask for edge wear and for dirt |
+
+### The material
+**Material** at the end of the second row decides what `Create All Shown` does once the maps exist:
+* **New material**: a material next to the source with the maps on texture **parameters** named `BaseColor`, `Normal`, `Roughness`, `Metallic`, `AmbientOcclusion`, `ORM`, `Height`, `Edge`, wired to the right inputs with the right sampler types. Parameters and not baked samples, because a material with its textures fixed in cannot be instanced. Roughness goes through a `Roughness Multiplier` scalar, so an instance can dial the whole surface without touching the texture.
+* **Instance of a parent**: pick a material you already have and the maps are matched to its texture parameters by name, trying the usual spellings first exactly and then loosely (`BaseColor`, `Albedo`, `Diffuse`; `Normal`, `NormalMap`; `ORM`, `MRA`, `MaskMap`...). A map that finds no parameter is named in the status line rather than dropped in silence. The instance is reused when it exists, so running it twice updates instead of leaving `MI_Foo_1` behind.
+
+Every texture written carries `AEU.Estimated`, `AEU.EstimatedFrom` and `AEU.Origin` in its metadata (`Asset Actions > Show Metadata`), so months later nobody has to wonder whether a normal came out of a scanner or out of a guess.
+
+The suffixes, the ignore lists, the preview size and the default parameters live in `Editor Preferences > Advanced Editor Utilities > Advanced Settings`, under **Texture to PBR**.
+
+---
+
+## Make Seamless
+Right-click a texture and pick **Make Seamless...**. The panel shows the texture as it is beside the result, both drawn **repeated**, because a single copy of a texture always looks fine and the seam only exists where two copies meet.
+
+Two different problems, handled in this order:
+* **Level Lighting** flattens the slow brightness variation across the image. This is the half nobody expects: if one side of the photo was lit brighter than the other, the tiled result shows a band at every repeat however well the seam itself is blended. The correction divides by the local level instead of subtracting it, so the material keeps its contrast, and **Level Radius** says what counts as slow.
+* Then the seam, in one of two modes. **Blend the seam** offsets the image by half so the two joins land in the middle, where there is material around them to blend with, and mixes in the copy from the other side over a band you set. **Mirror** always tiles by construction, at the price of a symmetry the eye finds quickly.
+
+It does not invent detail: a structured pattern, a brick course or a plank, will still show where it repeats. That needs synthesis rather than blending, and is not what this does. The result is written as `<Name>_Tiling` next to the source, keeping its compression and colour space.
+
+---
+
 ## Graph editor tools
 
 ### Capture Nodes (Ctrl + Shift + Alt + U)
@@ -172,6 +222,7 @@ Two settings live in `Editor Preferences > Advanced Editor Utilities > Advanced 
 
 ## Editor settings
 * The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Naming Convention**, **World Outliner**, **Folder Templates**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
+* **Context Menu Placement** decides where the plugin's section goes inside the Content Browser menus: bottom (the default, where a menu extension lands on its own), top, or before / after a section you name in **Context Menu Anchor Section** (`CommonAssetActions` is the Edit / Rename / Duplicate block, `ImportedAssetActions` the Reimport one). An unknown name falls back to the bottom.
 * The category sits right below **General**. If you would rather have it elsewhere in the list, `Settings Category Sort Priority` in Advanced Settings moves it (lower goes higher up; the engine's own categories all sit at 0, except Advanced at 1).
 * The Level Design settings (arrays, physics tools, renamer, steps...) are per-project and live in `Project Settings > Plugins > AEU Level Design Settings`.
 * Use the reset checkboxes (Light blue rectangle) to reset the default values of the respective category (This is needed because UPROPERTIES with the "Config" specifier don't have the default yellow icon to reset them after you edit them)
@@ -351,7 +402,8 @@ Right-click assets in the Content Browser to find the **Advanced Editor Utilitie
 | Skeleton | **Export Sockets to JSON**, **Import Sockets from JSON...**, **Delete All Sockets** |
 | Blueprint | **Reparent Blueprint...**: pick a new parent class for every selected Blueprint in one go |
 | Material Instance | **Reparent Material Instance...**: change the parent material and/or the physical material of every selected instance |
-| Texture 2D | **Set Texture Settings...** (Texture Group, Compression Settings, sRGB on the whole selection), **Open In Image Resizer** |
+| Texture 2D | **Set Texture Settings...** (Texture Group, Compression Settings, sRGB on the whole selection), **Open In Image Resizer**, **Create PBR Textures...**, **Make Seamless...** (both open their own panel; hidden on textures the ignore lists exclude) |
+| Anim Sequence | **Change Frame Rate...**: resample the selected animations to another rate keeping their duration, or relabel them when the import got the rate wrong. Optionally converts a copy and leaves the original alone |
 | Data Table | **Sync With Data Assets**, **Push To Data Assets** (see below) |
 | Data Asset | **Convert To Data Table...** (see below) |
 | User Defined Struct | **Create Data Table...**: an empty table using the struct as row type; a dialog lets you pick the folder and the name (defaults to the struct's folder and `DT_<StructName>`) |
@@ -392,6 +444,7 @@ With the single-struct layout the struct is the only schema: edit it, save, and 
 * **Open Data Table** in the User Defined Struct editor (when at least one table uses the struct as row type; with several, one click opens them all)
 * **Check All / Uncheck Unchanged** in the Material Instance editor: the same one-click override toggle as the Material Parameters panel, on the instance you have open
 * **Export...** in the Static Mesh editor (after the Reimport buttons) and in the Texture editor (next to Compress and Reimport): the same action as `Asset Actions > Export...`, with the format picker, without going back to the Content Browser for it
+* **Show Pivot**, **Bounds**, **Simple Collision** and **Complex Collision** in the Static Mesh editor: the Show menu toggles worth having one click away while inspecting a mesh, each with its own switch. They keep their shortcuts and stay in step with the Show menu (this group applies when the asset is reopened)
 
 ---
 
