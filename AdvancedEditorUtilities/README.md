@@ -16,6 +16,7 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 * [Keyboard shortcuts](#keyboard-shortcuts)
 * [Main widget and toolbar](#main-widget-and-toolbar)
 * [View Modes and Console Commands panels](#view-modes-and-console-commands-panels)
+* [Material Parameters panel](#material-parameters-panel)
 * [Graph editor tools](#graph-editor-tools)
 * [Editor settings](#editor-settings)
 * [Naming Convention](#naming-convention)
@@ -24,6 +25,7 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 * [Level Design Tools](#level-design-tools)
 * [Physics Tools](#physics-tools)
 * [Image Resizer](#image-resizer)
+* [Folder colors and templates](#folder-colors-and-templates)
 * [Content Browser context menus](#content-browser-context-menus)
 * [Data Table / Data Asset conversion](#data-table--data-asset-conversion)
 * [Asset editor toolbar buttons](#asset-editor-toolbar-buttons)
@@ -78,8 +80,8 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 ### Toolbar Dropdown Sections
 The AEU toolbar dropdown button is organized into labeled sections:
 * **Tab Restore**: Restore Saved Tab Group, Save Open Tabs As Tab Group
-* **Tools**: World Locker, Image Resizer, View Modes, Console Commands (each opens as a dockable tab)
-* **Find In Blueprints**: dynamic entries from your Common Strings, each launching a "Find In Blueprints" search for that tag
+* **Tools**: World Locker, Image Resizer, View Modes, Console Commands, Material Parameters (each opens as a dockable tab)
+* **Find In Blueprints**: dynamic entries from your Common Strings, each launching a "Find In Blueprints" search for that tag. Every entry is marked with a dot in the colour configured for that tag, the same one its comment nodes get, so the dropdown doubles as their legend (the Common String Comment picker, Shift + Alt + C, shows the same dots)
 
 The `Tools` main menu also gains an **Advanced Editor Utilities** section with the **Starship Style Gallery** (browse every editor icon, brush, color and style, handy when building your own tools).
 
@@ -105,6 +107,36 @@ Both panels exist as tabs of the main widget and as standalone dockable windows 
   * **ToggleInverse**: used when the command used to activate the state is different from the one used to deactivate it, like `EnableAllScreenMessages` and `DisableAllScreenMessages`, in this case the first parameter in the array is used to store the second command.
   * **SinglePress**: used when the command is just a single action that doesn't change the button state, like `HighResShot`
   * **RadioButton**: used when the command has multiple parameters that can't be activated at the same time, like `Slomo` or `MaxFPS`
+
+---
+
+## Material Parameters panel
+A dockable window (toolbar dropdown > Tools > **Material Parameters**) listing the materials used by the **selected actors**, with the parameters of every Material Instance editable in place. Like the View Modes and Console Commands panels it is also a UMG widget, under the **Advanced Editor Utilities** palette category, so you can drop it into an Editor Utility Widget of your own. It follows the viewport selection, so it is the fastest way to tweak a scene without opening one Material Instance editor per object.
+
+* Parameters keep the **order the material declares them in**, grouped by their authored groups; the parameters a material left ungrouped end up in "Global". Alphabetical sorting would scramble the "01 - BaseColor / 02 - Textures" layouts materials are usually authored with.
+* Each row has the **override checkbox** of the Material Instance editor, the value editor for its type (scalar slider, colour swatch, texture picker, static switch...) and a **reset arrow** shown only while the instance overrides its parent.
+* One **search box** at the top filters the parameters of every material at once. Next to it, two buttons fold or unfold **General** and **Used by** across all of them; both start folded.
+* **Used by** lists every actor, component and material slot of the selection using that material, and clicking one selects that actor alone.
+* **General** is the instance's physical material, Lightmass settings and base property overrides, shown with the engine's own editors.
+* A plain **Material** (not an instance) still gets a row: its parameters cannot be edited, but "Create child instance" turns it into one and assigns it to the selection on the spot.
+* Edits are written straight to the asset, exactly like the Material Instance editor does, and they are **undoable** (a slider drag or a colour picker drag is one undo step). If that editor is open on the same instance, its checkboxes and values follow along.
+
+The buttons on each material's title bar, left to right:
+
+| Button | What it does |
+|---|---|
+| **Save** | Saves the material. Shown only while the asset is dirty; it is not an "apply", every edit already went into the asset |
+| **Revert** | Discards the unsaved parameter changes by reading back the version on disk. Nothing is unloaded (unlike `Asset Actions > Reload`), so no reference anywhere goes stale, and the revert itself is undoable. Shown only while the asset is dirty |
+| **Use Selected Asset from Content Browser** | Replaces this material with the one selected in the Content Browser, in every slot of the selection that was using it |
+| **Show in Content Browser** / **Open** | Browse to the asset, or open it in its own editor |
+| **Select actors using this material** | Selects every actor in the loaded levels using it, not just the ones already selected |
+| **Duplicate as sibling** | Duplicates the instance (same parent, same overrides) and assigns the copy wherever the selection used the original |
+| **Create child instance** | Creates a child Material Instance and assigns it the same way. The only entry available on a plain Material |
+| **Check all / Uncheck unchanged** | The checkbox at the end: checked, it overrides every parameter of the instance; unchecked, it drops only the overrides whose value still equals the parent's, so nothing you actually changed is lost. One transaction either way, and the same action sits in the Material Instance editor toolbar |
+
+Both creation buttons save the new instance to disk as soon as they assign it, so Revert has a saved state to go back to from the very first edit.
+
+Two settings live in `Editor Preferences > Advanced Editor Utilities > Advanced Settings`: the **maximum number of materials** the panel lists at once (a select-all would otherwise build hundreds of rows), and a list of **excluded materials** by name or path, wildcards allowed. The General section can also be turned off there.
 
 ---
 
@@ -139,7 +171,8 @@ Both panels exist as tabs of the main widget and as standalone dockable windows 
 ---
 
 ## Editor settings
-* The settings live in `Editor Preferences > Plugins`, split into one page per topic so the big arrays never crowd each other: **AEU | Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, menu and toolbar switches), **AEU | Console Commands**, **AEU | View Modes**, **AEU | Common Strings**, **AEU | Node Shortcuts**, **AEU | Naming Convention**, **AEU | World Outliner**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last.
+* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Naming Convention**, **World Outliner**, **Folder Templates**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
+* The category sits right below **General**. If you would rather have it elsewhere in the list, `Settings Category Sort Priority` in Advanced Settings moves it (lower goes higher up; the engine's own categories all sit at 0, except Advanced at 1).
 * The Level Design settings (arrays, physics tools, renamer, steps...) are per-project and live in `Project Settings > Plugins > AEU Level Design Settings`.
 * Use the reset checkboxes (Light blue rectangle) to reset the default values of the respective category (This is needed because UPROPERTIES with the "Config" specifier don't have the default yellow icon to reset them after you edit them)
 
@@ -293,8 +326,20 @@ A dockable tab (toolbar dropdown > Tools > Image Resizer) to batch resize textur
 
 ---
 
+## Folder colors and templates
+A **folder template** is a relative path, a colour, and two switches: whether the "Create Folder Structure" dialog creates it, and whether its colour is shared with the team. The plugin ships about 50 of them (`Blueprints`, `Materials/Textures`, `Meshes/StaticMeshes`, `Audio/SFX`, `UI/Widgets`, and so on); the secondary ones are there but unchecked, so you enable the ones your project actually uses. They live in `Editor Preferences > Advanced Editor Utilities > Folder Templates`, with a reset checkbox above the array.
+
+Right-click a folder in the Content Browser to find:
+
+* **Create Folder Structure...**: pick the root folder first, then check what to create in a tree that shows the **final paths** already, each leaf in its own colour. Checking a child checks its parents, unchecking a parent unchecks everything under it.
+* **Auto Color Folders (In `<folder>`)**: colours every folder underneath that matches a template. Matching is done on **whole path segments from the end**, so a template `Materials/Textures` colours `/Game/Env/Rocks/Materials/Textures` but never a folder that merely contains the word; when several templates match, the longest match wins. Folders matching nothing are left as they are.
+
+Folder colours are per-user by default (the engine stores them in your `Saved` folder). A template with **Color Shared** on also writes its colour to `Config/AEUFolderColors.ini`, which is versioned: the plugin applies that file at startup, so a colour committed once shows up for everybody on the project without each person recolouring anything.
+
+---
+
 ## Content Browser context menus
-Every entry and button listed here (and in the next two sections) can be switched off individually in `Editor Preferences > Plugins > AEU | Advanced Settings`, under **Menus & Toolbars** at the bottom of the page: one checkbox per entry. The list is rebuilt at every startup, so updates never leave stale entries behind, and unchecking one takes effect immediately without restarting the editor.
+Every entry and button listed here (and in the next two sections) can be switched off individually in `Editor Preferences > Advanced Editor Utilities > Advanced Settings`, under **Menus & Toolbars** at the bottom of the page: one checkbox per entry. The list is rebuilt at every startup, so updates never leave stale entries behind, and unchecking one takes effect immediately without restarting the editor.
 
 Right-click assets in the Content Browser to find the **Advanced Editor Utilities** section:
 
@@ -343,8 +388,10 @@ With the single-struct layout the struct is the only schema: edit it, save, and 
 ## Asset editor toolbar buttons
 * **Capture Nodes** in every asset editor that has a node graph
 * **Sync Data Assets** and **Push To Data Assets** in the Data Table editor
-* **Sync Data Table** in the Data Asset editor (when the paired table exists)
+* **Sync Data Table** and **Open Data Table** in the Data Asset editor (when the paired table exists)
 * **Open Data Table** in the User Defined Struct editor (when at least one table uses the struct as row type; with several, one click opens them all)
+* **Check All / Uncheck Unchanged** in the Material Instance editor: the same one-click override toggle as the Material Parameters panel, on the instance you have open
+* **Export...** in the Static Mesh editor (after the Reimport buttons) and in the Texture editor (next to Compress and Reimport): the same action as `Asset Actions > Export...`, with the format picker, without going back to the Content Browser for it
 
 ---
 
