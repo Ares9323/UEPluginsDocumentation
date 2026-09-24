@@ -29,6 +29,7 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 * [Image Resizer](#image-resizer)
 * [Folder colors and templates](#folder-colors-and-templates)
 * [Content Browser context menus](#content-browser-context-menus)
+* [Delete Connected Assets](#delete-connected-assets)
 * [Data Table / Data Asset conversion](#data-table--data-asset-conversion)
 * [Asset editor toolbar buttons](#asset-editor-toolbar-buttons)
 * [Mesh Socket Utilities](#mesh-socket-utilities)
@@ -313,6 +314,18 @@ The Renamer, Align, Array, Pivot and Random tabs of the main widget, backed by t
 * The spline array places a temporary spline actor you can edit in the viewport; the preview follows it in real time.
 * **Confirm** spawns the final actors (individual actors or one Instanced Static Mesh), **Cancel** or **Esc** discards the preview.
 
+### Gizmo drag array
+Build a row, a plane or a block straight from the move gizmo, without opening anything.
+
+* Select an actor, hold **Ctrl** and drag one of the gizmo axes. Instead of moving the actor, a preview array grows along that axis up to where you drag.
+* The spacing comes from the mesh bounds in that direction, so modular pieces meet edge to edge. A **gap** per axis is editable in the overlay.
+* Releasing the mouse keeps the preview. Rotate the camera, do something else, then Ctrl-drag a second axis to turn the row into a plane, and a third to turn the plane into a block.
+* It follows the gizmo's **World / Local** toggle, and it follows the source actor: move or rotate that actor and the whole block moves with it.
+* **Hollow** fill leaves the inside empty. Overlapping cells are drawn in red and skipped on Apply, so building the second side of a corner does not duplicate the pieces already there.
+* **Enter** or **Apply** spawns everything in one transaction, **Esc** cancels.
+
+Switch it off, or make it focus the Array tab when it starts, in `Editor Preferences > Advanced Editor Utilities > Advanced Settings`, under **Gizmo Drag Array**. The **Toggle Gizmo Drag Array** command has no default chord and can be bound in the Keyboard Shortcuts page.
+
 ### Pivot Actor and Source Actors
 * **Set / Select / Clear Pivot Actor**: the first selected actor becomes the pivot used by radial distribution and arrays.
 * **Set / Select / Clear Source Actors**: store a selection to use as the template set for arrays and physics tools, independently from what is currently selected.
@@ -396,8 +409,8 @@ Right-click assets in the Content Browser to find the **Advanced Editor Utilitie
 
 | Asset type | Entries |
 |---|---|
-| Any asset | **Adapt To Naming Convention**, **Select Actors Using This Asset** (selects every actor in the loaded levels that uses the selected assets) |
-| Static Mesh | **Copy Sockets**, **Paste Sockets (Replace / Additive)**, **Delete All Sockets**, **Create Multiple Sockets...**, **Set Pivot** (Center, Faces, Edges, Corners: moves the mesh vertices, collision and sockets so the asset pivot changes for every instance) |
+| Any asset | **Adapt To Naming Convention**, **Select Actors Using This Asset** (selects every actor in the loaded levels that uses the selected assets), **Delete Connected Assets** (see below) |
+| Static Mesh | **Mesh Sockets** (Copy, Paste Replace / Additive, Delete All, Create Multiple...), **Set Pivot** (Center, Faces, Edges, Corners: moves the mesh vertices, collision and sockets so the asset pivot changes for every instance) |
 | Skeletal Mesh | **Export Sockets to JSON** (Skeleton only / Mesh only / All), **Import Sockets from JSON** (Skeleton only / All), **Delete Sockets** (Skeleton only / Mesh only / All), with live counts |
 | Skeleton | **Export Sockets to JSON**, **Import Sockets from JSON...**, **Delete All Sockets** |
 | Blueprint | **Reparent Blueprint...**: pick a new parent class for every selected Blueprint in one go |
@@ -407,6 +420,54 @@ Right-click assets in the Content Browser to find the **Advanced Editor Utilitie
 | Data Table | **Sync With Data Assets**, **Push To Data Assets** (see below) |
 | Data Asset | **Convert To Data Table...** (see below) |
 | User Defined Struct | **Create Data Table...**: an empty table using the struct as row type; a dialog lets you pick the folder and the name (defaults to the struct's folder and `DT_<StructName>`) |
+
+---
+
+## Delete Connected Assets
+Right-click any asset and pick **Delete Connected Assets**. The tool finds everything that exists *only* because of what you selected, shows it to you, and deletes it once you confirm.
+
+It exists for the case the engine's own unused-asset scan cannot help with: a bought pack you want to strip down before it goes into source control. Those packs ship a demo level that places one of everything, so nothing ever looks unused.
+
+> **Deleting assets cannot be undone.** It is a file operation, not a transaction, so Ctrl+Z does not bring them back. Have the project under source control or backed up before you confirm.
+
+### What it looks at
+Starting from the selection, the tool walks the dependency graph in both directions and collects everything it can reach. Two things bound that walk: it never leaves the mount root the selection came from (a `/Game` selection stays inside `/Game`), and it records levels without walking through them, so a demo level cannot drag your own work into the list. Engine content is never deleted, whatever the graph concludes.
+
+### The asset list
+One row per asset, grouped by class, with each heading showing how many of that class are going and how much disk space that is. A ticked row will be deleted; an unticked one stays and says why:
+* **kept by your choice**: you unticked it. Tick it again to put it back.
+* **kept by \<asset\>**: something outside the delete list still references it, so its tick is disabled. Release it by keeping less, or by changing the state of the level that holds it.
+
+Unticking an asset also keeps everything that existed only for it: untick a material and its textures lose their ticks in front of you, because the material you are keeping still needs them.
+
+**Only textures, materials, static meshes and skeletal meshes are ticked by default.** Everything else the walk reaches (Blueprints, data tables, user structs, data assets) starts unticked and has to be ticked by hand: a texture is an import and a mistake costs a re-import, while a Blueprint is authored work and the delete cannot be undone. The class list is configurable as **Cascade Auto Select Classes**, and subclasses follow their parent.
+
+The heading checkbox ticks or unticks a whole class in one click; **Select all** goes back to what the graph alone concluded, **Select none** keeps everything. The magnifier on each row jumps the Content Browser to that asset, and the window is not modal, so you can check things against the project while it stays open.
+
+### Affected maps
+Every level that references something in the list, with how many references it has and what should happen to it. The default is always to keep the level intact, except for a level you selected yourself.
+
+| State | What it does |
+|---|---|
+| **Keep the map and what it uses** | The level is untouched and protects what it references, so those assets leave the delete list. |
+| **Keep the map, break its references** | The level is untouched but stops protecting. Its assets can go, and the level is left pointing at nothing: its actors open with a missing mesh or material. |
+| **Delete the map as well** | The level goes too, with its own actor packages on a World Partition project. |
+| **Keep the map, remove the actors** | The level is kept and the actors that placed a deleted asset are removed from it. |
+
+If the list looks emptier than you expected, the reason is in the rows: something is still referencing them, and it is usually a demo level sitting at the default.
+
+### Removing actors from levels
+Picking **Keep the map, remove the actors** shows the actor classes involved, with a count and a per-level breakdown in the tooltip. The decision is **per class, not per actor**. Classes that exist only to place an asset are ticked by default (StaticMeshActor, SkeletalMeshActor, DecalActor, configurable as **Cascade Placement Only Actor Classes**); anything else starts unticked, because a Character whose mesh is going is still a Character with its own logic.
+
+On a **World Partition** level each actor is its own file, so removing one is deleting a file and the level is never opened. A **classic** level keeps its actors inside the `.umap`, and nothing can edit one without loading it, so the tool launches a separate editor process: press **Analyse levels** to count them first, then the removal runs as part of the delete. Those levels must not be open in the editor, and the tool names them rather than running anyway.
+
+### What it cannot see
+The analysis reads the asset registry, which records **hard references only**. An actor or a Blueprint that resolves an asset at runtime, by name or through a soft reference, is invisible here: the asset will look unreferenced and the break will only show up when that code runs. If a pack loads things that way, check it by hand before confirming.
+
+### Settings
+Under `Project Settings > Plugins > Advanced Editor Utilities | Level Design Tools`, category **Cascade Delete**: the island size limit, whether redirectors are fixed up first (a redirector left by a rename is a package that references its target, so the walk would read it as a live referencer), the master switch for actor removal, and the timeout for the separate process.
+
+`AEU.VerifyCascadeGraph` in the editor console runs the self-checks for the dependency maths against a built-in fake project and touches nothing in yours.
 
 ---
 
