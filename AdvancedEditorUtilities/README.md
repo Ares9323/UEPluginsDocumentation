@@ -449,7 +449,7 @@ Unticking an asset also keeps everything that existed only for it: untick a mate
 The heading checkbox ticks or unticks a whole class in one click; **Select all** goes back to what the graph alone concluded, **Select none** keeps everything. The magnifier on each row jumps the Content Browser to that asset, and the window is not modal, so you can check things against the project while it stays open.
 
 ### Affected maps
-Every level that references something in the list, with how many references it has and what should happen to it. The default is always to keep the level intact, except for a level you selected yourself.
+Every level that references something in the list, with how many references it has and what should happen to it. The default is always to keep the level intact, except for a level you selected yourself. **Set all maps to...** above the list applies one state to every level at once.
 
 | State | What it does |
 |---|---|
@@ -463,10 +463,13 @@ If the list looks emptier than you expected, the reason is in the rows: somethin
 ### Removing actors from levels
 Picking **Keep the map, remove the actors** shows the actor classes involved, with a count and a per-level breakdown in the tooltip. The decision is **per class, not per actor**. Classes that exist only to place an asset are ticked by default (StaticMeshActor, SkeletalMeshActor, DecalActor, configurable as **Cascade Placement Only Actor Classes**); anything else starts unticked, because a Character whose mesh is going is still a Character with its own logic.
 
-On a **World Partition** level each actor is its own file, so removing one is deleting a file and the level is never opened. A **classic** level keeps its actors inside the `.umap`, and nothing can edit one without loading it, so the tool launches a separate editor process: press **Analyse levels** to count them first, then the removal runs as part of the delete. Those levels must not be open in the editor, and the tool names them rather than running anyway.
+On a **World Partition** level each actor is its own file, so removing one is deleting a file and the level is never opened. A **classic** level keeps its actors inside the `.umap`, and nothing can edit one without loading it, so the tool launches a separate editor process: press **Analyse levels** to count them first, then the removal runs as part of the delete. If the level you have open is involved, the tool offers to save it, switches to a blank level while it works and opens your level again afterwards (unless it was deleted).
 
 ### What it cannot see
 The analysis reads the asset registry, which records **hard references only**. An actor or a Blueprint that resolves an asset at runtime, by name or through a soft reference, is invisible here: the asset will look unreferenced and the break will only show up when that code runs. If a pack loads things that way, check it by hand before confirming.
+
+### If something holds the delete up
+The engine refuses the whole delete when any asset is still held in memory, usually by an editor leftover such as an asset editor you opened and closed. The tool collects garbage first; if the delete is still refused, a notification tells you and the engine's own delete window opens to name what is holding it. **Do not press Force Delete there**: it deletes regardless of references and nulls them out in the assets you are keeping. Close what it names, or restart the editor, and run the tool again.
 
 ### Settings
 Under `Project Settings > Plugins > Advanced Editor Utilities | Level Design Tools`, category **Cascade Delete**: the island size limit, whether redirectors are fixed up first (a redirector left by a rename is a package that references its target, so the walk would read it as a live referencer), the master switch for actor removal, and the timeout for the separate process.
