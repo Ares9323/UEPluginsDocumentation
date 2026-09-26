@@ -431,12 +431,16 @@ It exists for the case the engine's own unused-asset scan cannot help with: a bo
 > **Deleting assets cannot be undone.** It is a file operation, not a transaction, so Ctrl+Z does not bring them back. Have the project under source control or backed up before you confirm.
 
 ### What it looks at
-Starting from the selection, the tool walks the dependency graph in both directions and collects everything it can reach. Two things bound that walk: it never leaves the mount root the selection came from (a `/Game` selection stays inside `/Game`), and it records levels without walking through them, so a demo level cannot drag your own work into the list. Engine content is never deleted, whatever the graph concludes.
+Starting from the selection, the tool follows what it uses (its material, that material's textures, and so on). It never goes the other way: an asset that uses your selection, or uses something your selection uses, is not collected.
+
+Everything another asset still uses is then left out, together with whatever only it was holding up. A master material shared with a mesh you did not select is not listed at all, and neither are its textures; select every mesh that uses it and it comes back. **Levels are the exception**: what only a level uses stays in the list, because the level can be deleted, kept with broken references or stripped of those actors (see below). That is what makes a pack's showcase level removable.
+
+Two things bound the walk: it never leaves the mount root the selection came from (a `/Game` selection stays inside `/Game`), and it records levels without walking through them, so a demo level cannot drag your own work into the list. Engine content is never deleted, whatever the graph concludes.
 
 ### The asset list
 One row per asset, grouped by class, with each heading showing how many of that class are going and how much disk space that is. A ticked row will be deleted; an unticked one stays and says why:
 * **kept by your choice**: you unticked it. Tick it again to put it back.
-* **kept by \<asset\>**: something outside the delete list still references it, so its tick is disabled. Release it by keeping less, or by changing the state of the level that holds it.
+* **kept by \<asset or level\>**: something outside the delete list still references it (a level at its default state, or an asset you unticked), so its tick is disabled. Release it by changing the state of that level, or by ticking what you kept.
 
 Unticking an asset also keeps everything that existed only for it: untick a material and its textures lose their ticks in front of you, because the material you are keeping still needs them.
 
