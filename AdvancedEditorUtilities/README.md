@@ -144,6 +144,8 @@ Two settings live in `Editor Preferences > Advanced Editor Utilities > Advanced 
 ---
 
 ## Create PBR Textures
+> **Meant for prototyping and placeholders.** The maps this tool produces are approximations and tend to be imprecise. It does not replace a proper texturing pipeline (scanned, baked or hand-authored maps): use it to block out materials quickly or to stand in until the real textures are ready.
+
 Right-click a colour texture and pick **Create PBR Textures...**, or open the panel from `Window` and drop a texture on it. The panel shows the source beside the maps estimated from it, framed together, each with its own parameters underneath.
 
 Everything here is a guess read out of the luminance of the source: a normal from its gradient, an occlusion from the horizon around each pixel, a roughness from local contrast, an albedo from flattening the light the photo baked in. They are not measurements, and no colour image carries the information a scanner would give you. Good enough to block out a material or to rescue a texture that came with nothing else, not a replacement for authored maps.
@@ -181,6 +183,8 @@ The suffixes, the ignore lists, the preview size and the default parameters live
 ---
 
 ## Make Seamless
+> **Meant for prototyping and placeholders.** Automatic tiling is an approximation and the result is often imprecise, especially on structured patterns. It does not replace a proper texturing pipeline (textures authored or captured to tile): use it for quick blockouts or temporary materials.
+
 Right-click a texture and pick **Make Seamless...**. The panel shows the texture as it is beside the result, both drawn **repeated**, because a single copy of a texture always looks fine and the seam only exists where two copies meet.
 
 Two different problems, handled in this order:
@@ -214,6 +218,15 @@ It does not invent detail: a structured pattern, a brick course or a plank, will
 * While editing a Blueprint graph, press **Ctrl + Alt + M** to spawn a **Math Expression** node at the mouse cursor position
 * The default expression it opens with is configurable in the settings
 
+### Replication naming for custom events
+Custom events keep their name and their replication in sync, so a `Server_` event is always a server RPC:
+* **Rename sets the replication**: rename a custom event (double-click its title, F2 in the graph or in My Blueprint) to `Server_Fire` and it becomes **Run on Server**; `Client_` gives **Run on owning Client**, `Multicast_` gives **Multicast**
+* **Replication renames the event**: pick a different replication in the Details panel and the affix in the name is added or swapped (`Fire` becomes `Multicast_Fire`); picking **Not Replicated** removes it
+* The flags are set exactly as the Details panel sets them; **Reliable** is left as it was
+* Each change is **one undo step** together with the rename or the replication change that caused it
+* Nothing happens when events are pasted, duplicated, loaded or compiled, and overridden parent events are left alone
+* Settings in `Editor Preferences > Advanced Editor Utilities > Blueprint > Replication Naming`: master switch, set the replication on rename, rename on replication change, optionally clear the replication when a new name has no affix, and the three affixes, each as a prefix or a suffix (for example `_Srv`). An empty affix takes that replication out of the naming
+
 ### Node shortcuts
 * You can add/edit/remove custom shortcuts for Blueprint and Material nodes from the settings; if you do that you'll need to restart the editor to see them working:
 
@@ -222,7 +235,7 @@ It does not invent detail: a structured pattern, a brick course or a plank, will
 ---
 
 ## Editor settings
-* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Naming Convention**, **World Outliner**, **Folder Templates**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
+* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Blueprint** (Replication Naming), **Naming Convention**, **World Outliner**, **Folder Templates**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
 * **Context Menu Placement** decides where the plugin's section goes inside the Content Browser menus: bottom (the default, where a menu extension lands on its own), top, or before / after a section you name in **Context Menu Anchor Section** (`CommonAssetActions` is the Edit / Rename / Duplicate block, `ImportedAssetActions` the Reimport one). An unknown name falls back to the bottom.
 * The category sits right below **General**. If you would rather have it elsewhere in the list, `Settings Category Sort Priority` in Advanced Settings moves it (lower goes higher up; the engine's own categories all sit at 0, except Advanced at 1).
 * The Level Design settings (arrays, physics tools, renamer, steps...) are per-project and live in `Project Settings > Plugins > AEU Level Design Settings`.
