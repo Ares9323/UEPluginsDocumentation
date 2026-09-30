@@ -160,6 +160,18 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 
 > **Key remappers**: tools that remap Shift + F-keys system-wide (for example PowerToys Keyboard Manager turning Shift + F1…F12 into F13…F24) stop `Shift + F2` from reaching the editor. Exclude the editor from the remap or pick another key in the settings.
 
+#### Auto Format
+
+**Edit > Editor Preferences > Plugins > AresGraphManager Formatter > Auto Format** tidies a Blueprint graph right after you add a node: from the creation menu (right-click, `Tab`, a wire dragged to empty space), a spawn shortcut, a drop from My Blueprint, paste, `Ctrl + H` or Create Node on Wire.
+
+| Value | What happens |
+|-------|--------------|
+| Off (default) | Nothing moves. |
+| New Node | Only the new node moves: right of the output it came from, or left of the input it feeds, with its pin level with that pin. Nothing else is pushed. A node connected to nothing stays where you dropped it. |
+| Connected Tree | Runs Format Connected on the new node's tree. |
+
+The move is part of the same undo step as the new node, so one `Ctrl + Z` removes the node and puts everything back. Reroutes, comments, conversion nodes created by connecting two pins and nodes created by other tools, the compiler or undo are never moved.
+
 ---
 
 ### Graph Cleanup
