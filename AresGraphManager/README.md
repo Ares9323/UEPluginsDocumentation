@@ -206,13 +206,17 @@ Remove orphaned reroute nodes and broken pin links from the current graph with a
 | Enable Graph Cleanup | true | Toggle the cleanup feature |
 | Graph Cleanup Key | Delete | Key to trigger cleanup |
 | Graph Cleanup Modifier | Alt | Modifier key required (`Alt`, `Ctrl`, `Shift` — no `None` option) |
+| Delete Unlinked Nodes | true | Holding the second modifier with the cleanup shortcut also deletes every node linked to nothing |
+| Delete Unlinked Nodes Modifier | Shift | Second modifier, held together with the cleanup modifier (must differ from it) |
 
-**Shortcut:** `Alt + Delete`
+**Shortcuts:** `Alt + Delete` (cleanup), `Shift + Alt + Delete` (cleanup plus nodes linked to nothing)
 
 **What it removes:**
 
 - **Orphaned reroute nodes** — reroute/knot nodes where following the chain in either direction never reaches a real node. Chains of reroutes that connect two real nodes are preserved.
 - **Broken pin links** — null pointer references in pin connections
+
+**What `Shift + Alt + Delete` also removes:** every node linked to nothing, in Blueprint (Anim included) and Material graphs. A node whose only links lead into orphaned reroutes counts as unlinked; two nodes linked only to each other stay. Never deleted: comments and other pinless nodes, nodes the editor does not let you delete by hand, Function Entry/Result and macro tunnels, Custom Events (they can be called by name from elsewhere), Material Function inputs/outputs, Named Reroute declarations. One undo step, and a notification tells how many nodes and reroutes went.
 
 ---
 
@@ -292,6 +296,7 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `Alt + X` | Bypass enabled | Delete & bypass selected nodes |
 | `X` on disconnected node | Bypass enabled | Delete disconnected node |
 | `Alt + Delete` | Cleanup enabled | Clean up orphaned reroutes and broken links |
+| `Shift + Alt + Delete` | Cleanup and Delete Unlinked Nodes enabled | Cleanup plus every node linked to nothing |
 | `Tab` | Node Commands | Creation menu filtered on the pin under the mouse |
 | `Ctrl + H` | Node Commands | Replace the selected node, keeping its links |
 | `F2` | Node Commands | Rename the variable / function / event / macro the node refers to |
