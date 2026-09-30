@@ -20,7 +20,28 @@ Available on [FAB](https://www.fab.com/portal/listings/e7d9e12b-dcc0-426e-b409-7
 
 ## Settings
 
-All settings are in **Edit > Project Settings > Plugins > AresGraphManager**. Settings are saved globally (shared across all projects).
+All settings are in **Edit > Editor Preferences > Ares Graph Manager**, one page per topic:
+
+| Page | What it holds |
+|------|---------------|
+| General | Enable AresGraphManager, size of the graph context menu and of the object picker, position of the Ares Graph Manager category in Editor Preferences |
+| Theme | Editor theme hue, saturation and luminosity, accent colors |
+| Node Theme | Node opacity and header colors |
+| Wires | Wire routing on/off, supported graphs, routing, appearance, node avoidance, jumps, highlight, drag preview colors |
+| Material Wire Colors | Material pins and wires colored by type, and their palette |
+| Formatter | Formatter shortcuts, Auto Format, layout spacing |
+| Comment Wrapping | Comments that follow their nodes while dragging |
+| Shortcuts | Auto connect, auto insert, toggle Get/Set, bypass, cleanup, cutoff wires, reroute insert, multi connect, create node on wire, drag and pan |
+| Node Commands | Keyboard node commands (see [Node Commands](#node-commands)) |
+| Menus & Toolbars | Show or hide each button the plugin adds, and where the Wire Routing button sits in the asset editor toolbars |
+
+General, Theme, Node Theme and Menus & Toolbars are also saved to the plugin's `Settings.ini`, so they follow the plugin to every project. The other pages are saved per project.
+
+Each page starts with a **Reset** checkbox for what it shows (see [Reset](#reset)).
+
+**Category position in Editor Preferences:** General > Settings Category Sort Priority decides where **Ares Graph Manager** sits in the Editor Preferences list, like the same setting of AdvancedEditorUtilities. The engine sorts categories by this number: the project's own category is -1, General is moved to -0.75, AdvancedEditorUtilities defaults to -0.5, so the default -0.45 puts Ares Graph Manager right under it (right under General when AdvancedEditorUtilities is not installed). Every engine category is 0 and Advanced is 1; a value above 1 moves the category to the very bottom. The change applies at once and only changes the order of the list.
+
+**Wire Routing button position:** Menus & Toolbars > Toolbar Placement puts the button first, last, or before / after a toolbar section named in Toolbar Anchor Section (default: after `Asset`, the Save and Browse block). A section the opened editor does not have falls back to after `Asset`. Changes apply to the asset editors already open.
 
 ---
 
@@ -148,7 +169,7 @@ Remove a node from the execution flow while keeping the chain intact. The upstre
 
 ### Node Commands
 
-Keyboard commands for everyday node editing. Each one has its own enable switch and key in the **Node Commands** category of the Shortcuts settings, is one undo step, and is ignored while you type in a text field.
+Keyboard commands for everyday node editing. Each one has its own enable switch and key on the **Node Commands** settings page, is one undo step, and is ignored while you type in a text field.
 
 | Command | Default | What it does |
 |---------|---------|--------------|
@@ -162,7 +183,7 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 
 #### Auto Format
 
-**Edit > Editor Preferences > Plugins > AresGraphManager Formatter > Auto Format** tidies a Blueprint graph right after you add a node: from the creation menu (right-click, `Tab`, a wire dragged to empty space), a spawn shortcut, a drop from My Blueprint, paste, `Ctrl + H` or Create Node on Wire.
+**Edit > Editor Preferences > Ares Graph Manager > Formatter > Auto Format** tidies a Blueprint graph right after you add a node: from the creation menu (right-click, `Tab`, a wire dragged to empty space), a spawn shortcut, a drop from My Blueprint, paste, `Ctrl + H` or Create Node on Wire.
 
 | Value | What happens |
 |-------|--------------|
@@ -245,14 +266,21 @@ If one of these is installed, AresGraphManager logs a warning at editor startup.
 
 ### Reset
 
-Each settings category has a dedicated reset toggle in the **Reset** section. Check the box to restore defaults for that category:
+Each settings page has a **Reset** checkbox at the top. Check it to put what that page shows back to its default values; the change is saved right away and the box unchecks itself.
 
-- Reset Wire Style
-- Reset Theme
-- Reset Node Theme
-- Reset Auto Connect & Insert
-- Reset Bypass
-- Reset Cleanup
+| Page | Checkbox | Restores |
+|------|----------|----------|
+| General | Reset Menu Resize (first in Menu Resize) | Graph context menu and object picker size |
+| Theme | Reset Theme | The whole page |
+| Node Theme | Reset Node Theme | The whole page (turning Enable Node Theme back on asks for an editor restart) |
+| Wires | Reset Wires | Routing, appearance, node avoidance, jumps, highlight and drag preview colors |
+| Material Wire Colors | Reset Material Wire Colors | The whole page, palette included |
+| Formatter | Reset Formatter | The whole page: shortcuts, Auto Format, layout spacing |
+| Comment Wrapping | Reset Comment Wrapping | The whole page |
+| Shortcuts | One per category: Reset Auto Connect, Reset Auto Insert, Reset Toggle Get Set, Reset Bypass, Reset Cleanup, Reset Cutoff Wires, Reset Reroute Insert, Reset Multi Connect, Reset Create Node On Wire, Reset Drag and Pan | Its own category only |
+| Node Commands | Reset Node Commands | The whole page, keys included |
+
+Some settings have no reset: Enable AresGraphManager, the category position in Editor Preferences, wire routing on/off with the supported graphs and custom graph schemas (Reset Wires leaves them as they are), and the Menus & Toolbars page (it has its own Restore Default Menu Entries checkbox).
 
 ---
 
