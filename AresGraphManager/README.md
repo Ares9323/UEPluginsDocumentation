@@ -183,6 +183,10 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Toggle Context Sensitive | `Shift + Space` | While typing in the Blueprint node creation menu, flips its **Context Sensitive** checkbox without leaving the search box; the list refreshes and keeps what you typed. |
 | Open cast target | Double-click | Double-click a Cast node to open the class it casts to: the Blueprint editor for a Blueprint class, the source file in your IDE for a C++ class. |
 | Toggle comment bubbles pinned | none | Pins every node comment bubble of the graph so they stay visible when zoomed out, or unpins them all when they are all pinned already. Comment boxes are not touched. |
+| Select linked | `Alt + A` / `Alt + D` / `Alt + S` | Adds to the selection everything left of the selected nodes (all that leads into them, back to the event, parameters included), everything right of them (all that runs after, with the pure nodes feeding it) or the whole linked tree. `Alt + S` then `F` frames a whole event chain. (`Shift + A/D/S/W` stay the engine's Align commands.) |
+| Get / Set swap | `Space` | On a variable: a Get (plain or validated) becomes a Set, a Set becomes a Get. On other nodes `Space` is left to the engine. |
+| Toggle node context | `Shift + Space` | On a variable: a Set becomes a validated Get, a Get switches plain / validated. On other nodes: opens or closes the advanced pins (the arrow at the bottom of Print String), else switches a Cast between pure and impure, or shows / hides the exec pins of a function that has both forms. |
+| Copy / paste pin value | `Shift + Right Click` / `Shift + Left Click` | Copies a pin's value or pastes it, in the Details panel's own text format: a vector, colour, rotator, enum or asset copied from a property in Details pastes on a pin and the other way round. A `Shift` drag from a pin stays Multi Connect; only a click pastes. |
 
 > **Key remappers**: tools that remap Shift + F-keys system-wide (for example PowerToys Keyboard Manager turning Shift + F1…F12 into F13…F24) stop `Shift + F2` from reaching the editor. Exclude the editor from the remap or pick another key in the settings.
 
@@ -326,6 +330,10 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `Ctrl + Shift + Left / Right` | Node Commands | Swap the selected exec node with its neighbour |
 | `Shift + Space` | Node Commands | Toggle Context Sensitive while typing in the creation menu |
 | Double-click a Cast node | Node Commands | Open the class it casts to |
+| `Alt + A` / `Alt + D` / `Alt + S` | Node Commands | Select everything left / right / the linked tree |
+| `Space` / `Shift + Space` on a node | Node Commands | Get / Set swap; validated Get, advanced pins, pure / impure |
+| `Shift + Right / Left Click` on a pin | Node Commands | Copy / paste the pin value (Details panel format) |
+| Middle click on a Cast or pure function | Toggle Get Set | Pure / impure (on a variable: Get / Set, as before) |
 | `Tab` / `Shift + Tab` in a pin value | Node Commands | Next / previous value of the node |
 | Arrows in a pin value | Node Commands | Caret, step numbers and enums, open asset pickers; never leave the node |
 | Hold any modifier while dragging | Auto Connect/Insert set to None | Temporarily disable auto-connect/insert and enable node-avoidance on the dragged node |
