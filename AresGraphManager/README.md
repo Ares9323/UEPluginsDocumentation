@@ -178,6 +178,10 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Rename member | `F2` | With a node that refers to a variable, function, custom event or macro of this Blueprint selected, renames that member the same way My Blueprint does, updating every reference. On any other node `F2` is the engine's own rename. |
 | Edit node comment | `Shift + F2` | Opens the node's comment bubble with the cursor in its text. |
 | Duplicate variable per link | `Ctrl + Shift + V` | For a getter (or another pure node with one output) wired into several pins, makes one copy per link, each placed next to the pin it feeds and aligned on it. Works across macros, Select/Switch and reroutes; a link that cannot be moved stays on the original. |
+| Select node in a direction | `Ctrl + Arrows` | Selects the nearest node up, down, left or right of the selected node (from the mouse cursor when none or several are selected). Comments and reroutes are skipped, the view follows when the node is off screen, and holding the keys walks along the graph. Works in every graph editor. |
+| Swap node | `Ctrl + Shift + Left / Right` | Swaps the selected exec node, or a selected exec chain, with the exec node before or after it: execution order and positions are exchanged, and parameter nodes feeding only one side move with it. **Auto Reorder Connected After Swap** (off by default) runs Format Connected on the swapped nodes afterwards, in the same undo step. Blueprint graphs. |
+| Toggle Context Sensitive | `Shift + Space` | While typing in the Blueprint node creation menu, flips its **Context Sensitive** checkbox without leaving the search box; the list refreshes and keeps what you typed. |
+| Open cast target | Double-click | Double-click a Cast node to open the class it casts to: the Blueprint editor for a Blueprint class, the source file in your IDE for a C++ class. |
 
 > **Key remappers**: tools that remap Shift + F-keys system-wide (for example PowerToys Keyboard Manager turning Shift + F1…F12 into F13…F24) stop `Shift + F2` from reaching the editor. Exclude the editor from the remap or pick another key in the settings.
 
@@ -302,6 +306,10 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `F2` | Node Commands | Rename the variable / function / event / macro the node refers to |
 | `Shift + F2` | Node Commands | Edit the node comment bubble |
 | `Ctrl + Shift + V` | Node Commands | One getter copy per link |
+| `Ctrl + Arrows` | Node Commands | Select the nearest node in that direction |
+| `Ctrl + Shift + Left / Right` | Node Commands | Swap the selected exec node with its neighbour |
+| `Shift + Space` | Node Commands | Toggle Context Sensitive while typing in the creation menu |
+| Double-click a Cast node | Node Commands | Open the class it casts to |
 | Hold any modifier while dragging | Auto Connect/Insert set to None | Temporarily disable auto-connect/insert and enable node-avoidance on the dragged node |
 
 *All keys and modifiers are configurable in settings. Bypass keys are ignored while typing in text fields.*
