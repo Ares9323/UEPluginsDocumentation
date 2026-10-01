@@ -179,7 +179,7 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Edit node comment | `Shift + F2` | Opens the node's comment bubble with the cursor in its text. |
 | Duplicate variable per link | `Ctrl + Shift + V` | For a getter (or another pure node with one output) wired into several pins, makes one copy per link, each placed next to the pin it feeds and aligned on it. Works across macros, Select/Switch and reroutes; a link that cannot be moved stays on the original. |
 | Select node in a direction | `Ctrl + Arrows` | Selects the nearest node up, down, left or right of the selected node (from the mouse cursor when none or several are selected). Comments and reroutes are skipped, the view follows when the node is off screen, and holding the keys walks along the graph. Works in every graph editor. |
-| Swap node | `Ctrl + Shift + Left / Right` | Swaps the selected exec node, or a selected exec chain, with the exec node before or after it: execution order and positions are exchanged, and parameter nodes feeding only one side move with it. **Auto Reorder Connected After Swap** (off by default) runs Format Connected on the swapped nodes afterwards, in the same undo step. Blueprint graphs. |
+| Swap node | `Ctrl + Shift + Left / Right` | Swaps the selected exec node, or a selected exec chain, with the exec node before or after it: execution order and positions are exchanged, and parameter nodes feeding only one side move with it. **Auto Reorder Connected After Swap** (off by default), or Auto Format on Connected Tree, runs Format Connected on the swapped nodes afterwards, in the same undo step. Blueprint graphs. |
 | Toggle Context Sensitive | `Shift + Space` | While typing in the Blueprint node creation menu, flips its **Context Sensitive** checkbox without leaving the search box; the list refreshes and keeps what you typed. |
 | Open cast target | Double-click | Double-click a Cast node to open the class it casts to: the Blueprint editor for a Blueprint class, the source file in your IDE for a C++ class. |
 | Toggle comment bubbles pinned | none | Pins every node comment bubble of the graph so they stay visible when zoomed out, or unpins them all when they are all pinned already. Comment boxes are not touched. |
@@ -187,6 +187,7 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Get / Set swap | `Space` | On a variable: a Get (plain or validated) becomes a Set, a Set becomes a Get. On other nodes `Space` is left to the engine. |
 | Toggle node context | `Shift + Space` | On a variable: a Set becomes a validated Get, a Get switches plain / validated. On other nodes: opens or closes the advanced pins (the arrow at the bottom of Print String), else switches a Cast between pure and impure, or shows / hides the exec pins of a function that has both forms. |
 | Copy / paste pin value | `Shift + Right Click` / `Shift + Left Click` | Copies a pin's value or pastes it, in the Details panel's own text format: a vector, colour, rotator, enum or asset copied from a property in Details pastes on a pin and the other way round. A `Shift` drag from a pin stays Multi Connect; only a click pastes. |
+| Rotate pins | `Ctrl + Shift + Down / Up` | Rotates the wires of a node's sibling pins by one place (on the selected node, or the node under the cursor). On two pins it is a swap: Branch True / False, an impure Cast's two exits, Subtract A / B (values included on unlinked inputs). On more it rotates: Sequence, Switch. The pins are those like the pin under the cursor, else the exec outputs, else the same-type inputs. With **Auto Format** on Connected Tree the tree is laid out again, same undo step. |
 
 > **Key remappers**: tools that remap Shift + F-keys system-wide (for example PowerToys Keyboard Manager turning Shift + F1…F12 into F13…F24) stop `Shift + F2` from reaching the editor. Exclude the editor from the remap or pick another key in the settings.
 
@@ -333,6 +334,7 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `Alt + A` / `Alt + D` / `Alt + S` | Node Commands | Select everything left / right / the linked tree |
 | `Space` / `Shift + Space` on a node | Node Commands | Get / Set swap; validated Get, advanced pins, pure / impure |
 | `Shift + Right / Left Click` on a pin | Node Commands | Copy / paste the pin value (Details panel format) |
+| `Ctrl + Shift + Down / Up` | Node Commands | Rotate / swap the wires of a node's sibling pins |
 | Middle click on a Cast or pure function | Toggle Get Set | Pure / impure (on a variable: Get / Set, as before) |
 | `Tab` / `Shift + Tab` in a pin value | Node Commands | Next / previous value of the node |
 | Arrows in a pin value | Node Commands | Caret, step numbers and enums, open asset pickers; never leave the node |
