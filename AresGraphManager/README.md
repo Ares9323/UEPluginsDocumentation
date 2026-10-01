@@ -182,8 +182,22 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Swap node | `Ctrl + Shift + Left / Right` | Swaps the selected exec node, or a selected exec chain, with the exec node before or after it: execution order and positions are exchanged, and parameter nodes feeding only one side move with it. **Auto Reorder Connected After Swap** (off by default) runs Format Connected on the swapped nodes afterwards, in the same undo step. Blueprint graphs. |
 | Toggle Context Sensitive | `Shift + Space` | While typing in the Blueprint node creation menu, flips its **Context Sensitive** checkbox without leaving the search box; the list refreshes and keeps what you typed. |
 | Open cast target | Double-click | Double-click a Cast node to open the class it casts to: the Blueprint editor for a Blueprint class, the source file in your IDE for a C++ class. |
+| Toggle comment bubbles pinned | none | Pins every node comment bubble of the graph so they stay visible when zoomed out, or unpins them all when they are all pinned already. Comment boxes are not touched. |
 
 > **Key remappers**: tools that remap Shift + F-keys system-wide (for example PowerToys Keyboard Manager turning Shift + F1…F12 into F13…F24) stop `Shift + F2` from reaching the editor. Exclude the editor from the remap or pick another key in the settings.
+
+#### Editing pin values from the keyboard
+
+While a pin's value on a node has keyboard focus (click in it, or reach it with `Tab`), the keyboard stays on that node:
+
+| Key | What it does |
+|-----|--------------|
+| `Tab` / `Shift + Tab` | Next / previous value of the same node, wrapping around: text and number fields, check boxes, drop-downs (enums, asset pickers) |
+| `Left` / `Right` | Move the caret in text and number fields; nothing on other values. The focus never jumps to other widgets of the editor |
+| `Up` / `Down` | Numbers +1 / -1 (`Shift`: 10), applied at once, one undo step each. Enums: previous / next entry. Asset pickers: open the picker. Check boxes: nothing (`Space` toggles them) |
+| `Space` / `Enter` on an enum | Opens the drop-down on the current entry; `Up` / `Down` move through it, `Enter` or `Space` pick, `Escape` closes. The focus comes back to the field |
+
+Switch: **Pin Value Arrow Keys** and **Tab Cycles Pin Values** on the Node Commands page.
 
 #### Auto Format
 
@@ -196,6 +210,8 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Connected Tree | Runs Format Connected on the new node's tree. |
 
 The move is part of the same undo step as the new node, so one `Ctrl + Z` removes the node and puts everything back. Reroutes, comments, conversion nodes created by connecting two pins and nodes created by other tools, the compiler or undo are never moved.
+
+**Auto Add Parent Node** (on by default, same page): when you add an event that overrides one with a body in the parent class (an event of a Blueprint parent, or a C++ BlueprintNativeEvent), the Parent call is added right of it with the exec and the parameters wired, in the same undo step. Events with nothing to call, such as BeginPlay on a C++ parent, are left alone. It works whatever Auto Format is set to.
 
 ---
 
@@ -310,6 +326,8 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `Ctrl + Shift + Left / Right` | Node Commands | Swap the selected exec node with its neighbour |
 | `Shift + Space` | Node Commands | Toggle Context Sensitive while typing in the creation menu |
 | Double-click a Cast node | Node Commands | Open the class it casts to |
+| `Tab` / `Shift + Tab` in a pin value | Node Commands | Next / previous value of the node |
+| Arrows in a pin value | Node Commands | Caret, step numbers and enums, open asset pickers; never leave the node |
 | Hold any modifier while dragging | Auto Connect/Insert set to None | Temporarily disable auto-connect/insert and enable node-avoidance on the dragged node |
 
 *All keys and modifiers are configurable in settings. Bypass keys are ignored while typing in text fields.*
