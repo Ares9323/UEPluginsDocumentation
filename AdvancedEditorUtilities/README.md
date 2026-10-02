@@ -15,6 +15,7 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 ## Table of contents
 * [Keyboard shortcuts](#keyboard-shortcuts)
 * [Main widget and toolbar](#main-widget-and-toolbar)
+* [Global Search](#global-search)
 * [View Modes and Console Commands panels](#view-modes-and-console-commands-panels)
 * [Material Parameters panel](#material-parameters-panel)
 * [Create PBR Textures](#create-pbr-textures)
@@ -44,6 +45,7 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 | Command | Default | Where it works |
 |---|---|---|
 | Open A.E.U. Utility | Ctrl + Shift + Alt + E | Everywhere |
+| Global Search | Ctrl + Alt + F | Everywhere |
 | Show in Explorer | Ctrl + Alt + E | Content Browser selection |
 | Restore Last Closed Tab | Ctrl + Shift + T | Everywhere |
 | Restore Saved Tab Group | Ctrl + Shift + Alt + T | Everywhere |
@@ -87,6 +89,45 @@ The AEU toolbar dropdown button is organized into labeled sections:
 * **Find In Blueprints**: dynamic entries from your Common Strings, each launching a "Find In Blueprints" search for that tag. Every entry is marked with a dot in the colour configured for that tag, the same one its comment nodes get, so the dropdown doubles as their legend (the Common String Comment picker, Shift + Alt + C, shows the same dots)
 
 The `Tools` main menu also gains an **Advanced Editor Utilities** section with the **Starship Style Gallery** (browse every editor icon, brush, color and style, handy when building your own tools).
+
+---
+
+## Global Search
+One window to find anything in the project: Blueprint functions, variables, events and macros, graph nodes, comments, pin values, and assets by name and type.
+
+### Opening it
+* Press **Ctrl + Alt + F** anywhere in the editor (Level Editor, Blueprint editors, any asset editor), or use `Tools > Advanced Editor Utilities > Global Search`
+* The window opens centered on the monitor under the mouse. Move or resize it and it remembers that rectangle for that monitor (or set **Always open centered**)
+* **Esc** closes it. It also closes when you click elsewhere, unless **Pin** is on
+
+### Searching
+* Results appear while you type, grouped by category with a count: **Assets**, **Functions**, **Variables**, **Events**, **Macros**, **Nodes**, **Comments**, **Pin Values**. Each row shows the name, its type or graph, and the Blueprint it lives in
+* Type at least **3 characters** (spaces do not count, underscores do)
+* Names match on their start, on any word inside them, and on CamelCase initials: `gpl` finds `GetPlayerLocation`. Comments and pin values match only when they contain what you typed
+* Asset types are shown with the same name and colour as in the Content Browser
+* The **chips** under the search box turn each category on or off; the choice is remembered
+* The **scope** menu searches the project content (your `/Game` folder and project plugins), the project plus Engine content, or only the Blueprint you are editing
+* Each category shows the best 50 results (configurable); **Show all** lists up to 2000
+
+### Opening a result
+* **Up / Down** move through the results, **Enter** opens the selected one (or the best match when nothing is selected)
+* An asset opens in its editor. A function, macro, variable, event, node, comment or pin value opens its Blueprint, jumps to the graph and selects the node (variables are selected in My Blueprint)
+* A result inside another map asks to save your unsaved changes before switching level
+* **Ctrl + B** (or Ctrl + Enter) shows the result's asset in the Content Browser
+* **Open in Find in Blueprints** sends the current query to the engine's own Find in Blueprints tab
+
+### How it stays fast
+* Blueprints are never loaded to be indexed. The index is built from the Find in Blueprints data that Unreal already saves inside every Blueprint, read on background threads, so the editor does not hitch while it builds
+* The index is cached on disk (`Saved/AEU/GlobalSearch.bin`): after the first launch only the Blueprints that changed are read again
+* It follows the project live: saved, added, renamed and deleted assets update it in the background, and Blueprints you are editing show their unsaved changes while the window is open
+
+### Blueprints without search data
+Blueprints saved before Find in Blueprints data existed, or never resaved since, have no usable data. The bottom of the window counts them:
+* **Update** loads them and resaves them (with source control checkout when enabled), which fixes their data for good. It skips Blueprints with errors, Blueprints you already modified, and maps (open and save those yourself)
+* Or turn on **Index unindexed Blueprints in background without saving**: they are loaded a few at a time while you work, without touching the files (paused during Play In Editor and while saving). Loaded Blueprints stay in memory until the editor restarts, so this is capped at 200 per session
+
+### Settings
+In `Editor Preferences > Advanced Editor Utilities > Global Search`: enable or disable the feature (restart required), the categories searched by default, include Engine content, results per category, always open centered, close on focus loss, and background indexing.
 
 ---
 
@@ -235,7 +276,7 @@ Custom events keep their name and their replication in sync, so a `Server_` even
 ---
 
 ## Editor settings
-* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Blueprint** (Replication Naming), **Naming Convention**, **World Outliner**, **Folder Templates**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
+* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Blueprint** (Replication Naming), **Naming Convention**, **World Outliner**, **Folder Templates**, **Global Search**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
 * **Context Menu Placement** decides where the plugin's section goes inside the Content Browser menus: bottom (the default, where a menu extension lands on its own), top, or before / after a section you name in **Context Menu Anchor Section** (`CommonAssetActions` is the Edit / Rename / Duplicate block, `ImportedAssetActions` the Reimport one). An unknown name falls back to the bottom.
 * The category sits right below **General**. If you would rather have it elsewhere in the list, `Settings Category Sort Priority` in Advanced Settings moves it (lower goes higher up; the engine's own categories all sit at 0, except Advanced at 1).
 * The Level Design settings (arrays, physics tools, renamer, steps...) are per-project and live in `Project Settings > Plugins > AEU Level Design Settings`.
