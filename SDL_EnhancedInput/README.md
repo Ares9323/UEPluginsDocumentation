@@ -54,9 +54,9 @@ This is the recommended setup when you want SDL Enhanced Input to be the single 
 
 ## CommonUI Button Prompts
 
-The plugin integrates with **CommonUI** so on-screen button prompts show the right icons per controller (PlayStation, Xbox, Switch, keyboard). The runtime emits a distinct **Hardware Device Identifier** per controller type (`SDLGamepad_PS5`, `SDLGamepad_XboxOne`, `SDLGamepad_SwitchPro`, ...), which CommonUI matches against a controller-data asset's **Gamepad Hardware Id Mapping**.
+The plugin integrates with **CommonUI** so on-screen button prompts show the right icons per controller (PlayStation, Xbox, Switch, keyboard). The runtime emits a distinct **Hardware Device Identifier** per controller type (`SDLGamepad_PS5`, `SDLGamepad_XboxOne`, `SDLGamepad_SwitchPro`, `SDLGamepad_Steam`, ...), which CommonUI matches against a controller-data asset's **Gamepad Hardware Id Mapping**.
 
-Ready-made presets are included in `Content/ExampleContent/UI/CommonUI/ControllerData/` (`CIBCD_PS4/PS5/XBOX_One/XBOX_360/SwitchPro/MouseKeyboard`, plus icon-less scaffolds under `EmptyPresets/` for PS3/GameCube/Joy-Cons and the generic `SDL_Gamepad`/`SDL_Joystick`).
+Ready-made presets are included in `Content/ExampleContent/UI/CommonUI/ControllerData/` (`CIBCD_PS4/PS5/XBOX_One/XBOX_360/SwitchPro/MouseKeyboard`, plus icon-less scaffolds under `EmptyPresets/` for PS3/GameCube/Steam/Joy-Cons and the generic `SDL_Gamepad`/`SDL_Joystick`).
 
 ### Setup
 
@@ -101,6 +101,7 @@ CommonUI shows the icon of an action's **first gamepad key** for the **current c
 | **Switch Pro Controller** | Standard gamepad, LED |
 | **Joy-Cons (paired)** | Standard gamepad |
 | **GameCube (adapter)** | Standard gamepad |
+| **Steam Controller / Steam Deck** | Standard gamepad, reported as its own controller type (`SDLGamepad_Steam`) |
 | **Racing Wheels** | Force feedback, RPM LEDs (Logitech G29/G920+) |
 | **Flight Sticks / HOTAS** | All axes, buttons, hats, force feedback |
 | **Arcade Sticks** | Buttons and stick via raw joystick |
@@ -440,7 +441,7 @@ The plugin includes 400+ example assets to get you started:
 |-------|-------------|
 | `CIBCD_PS4` / `PS5` / `XBOX_One` / `XBOX_360` / `SwitchPro` | Controller-data presets with button icons, wired to SDL's per-type identifiers |
 | `CIBCD_MouseKeyboard` | Keyboard & mouse prompt set |
-| `CIBCD_PS3` / `GameCube` / `JoyConLeft` / `JoyConRight` / `JoyConPair` | Icon-less scaffolds under `EmptyPresets/` (mapping pre-filled, drop in your own icons) |
+| `CIBCD_PS3` / `GameCube` / `Steam` / `JoyConLeft` / `JoyConRight` / `JoyConPair` | Icon-less scaffolds under `EmptyPresets/` (mapping pre-filled, drop in your own icons) |
 | `CIBCD_SDL_Gamepad` / `CIBCD_SDL_Joystick` | Generic icon-less scaffolds for unbranded gamepads / raw sticks |
 
 See [CommonUI Button Prompts](#commonui-button-prompts) for setup.
