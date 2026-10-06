@@ -29,7 +29,7 @@ All settings are in **Edit > Editor Preferences > Ares Graph Manager**, one page
 | Node Theme | Node opacity and header colors |
 | Wires | Wire routing on/off, supported graphs, routing, appearance, node avoidance, jumps, highlight, drag preview colors |
 | Material Wire Colors | Material pins and wires colored by type, and their palette |
-| Formatter | Formatter shortcuts, Auto Format, layout spacing |
+| Formatter | Formatter shortcuts, Auto Format, Auto Add Parent Node, Connect Exec from Parameter, Insert New Node, Format on Save, layout spacing |
 | Comment Wrapping | Comments that follow their nodes while dragging |
 | Shortcuts | Auto connect, auto insert, toggle Get/Set, bypass, cleanup, cutoff wires, reroute insert, multi connect, create node on wire, drag and pan |
 | Node Commands | Keyboard node commands (see [Node Commands](#node-commands)) |
@@ -185,7 +185,12 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Toggle comment bubbles pinned | none | Pins every node comment bubble of the graph so they stay visible when zoomed out, or unpins them all when they are all pinned already. Comment boxes are not touched. |
 | Select linked | `Alt + A` / `Alt + D` / `Alt + S` | Adds to the selection everything left of the selected nodes (all that leads into them, back to the event, parameters included), everything right of them (all that runs after, with the pure nodes feeding it) or the whole linked tree. `Alt + S` then `F` frames a whole event chain. (`Shift + A/D/S/W` stay the engine's Align commands.) |
 | Get / Set swap | `Space` | On a variable: a Get (plain or validated) becomes a Set, a Set becomes a Get. On other nodes `Space` is left to the engine. |
-| Toggle node context | `Shift + Space` | On a variable: a Set becomes a validated Get, a Get switches plain / validated. On other nodes: opens or closes the advanced pins (the arrow at the bottom of Print String), else switches a Cast between pure and impure, or shows / hides the exec pins of a function that has both forms. |
+| Toggle node context | `Shift + Space` | With the mouse over a struct pin (a Vector, a Hit Result...), splits it; over one of the pins of a split struct (X, Y, Z), recombines it, exactly like the right-click Split / Recombine Struct Pin. This comes first, before the selection. A struct pin with a link cannot be split, and a split struct with a linked sub-pin cannot be recombined (same rules as the engine): then, as on any other pin or off the pins, it acts on the nodes. On a variable: a Set becomes a validated Get, a Get switches plain / validated. On other nodes: opens or closes the advanced pins (the arrow at the bottom of Print String), else switches a Cast between pure and impure, or shows / hides the exec pins of a function that has both forms. Blueprint graphs for the pin step. |
+| Generate Getter | none | On a variable of this Blueprint (selected in My Blueprint, or a selected Get / Set node), creates the function `Get<Variable>`: pure, const, in the variable's category, returning the variable through an output named after it. A bool drops its leading `b` (`bIsAlive` gives `GetIsAlive`). If the getter exists already it opens instead of being duplicated. Also in the node's right-click menu, under **Ares Graph Manager**. |
+| Generate Getter and Setter | none | Same as Generate Getter, plus `Set<Variable>`: a function with one input of the variable's type that sets it. Functions that exist already are kept. Both are one undo step. |
+| Create Event | none | Creates a custom event with the signature of a delegate and binds it: the delegate pin under the mouse, else the first free delegate input of the selected node (Bind Event to a dispatcher, Assign, Set Timer by Event...). The event is placed left of the node and linked. Event graphs only. Also in the right-click menu of such a node or pin. |
+| Detect Unused Nodes | none | Selects the nodes of the focused Blueprint graph that never run and feed nothing that runs. Execution is followed from every entry point (events, input events, function entry, macro inputs), then every node that runs keeps the nodes feeding its inputs; reroutes count as wires. Comments are never selected and the view does not move. A notification gives the count, and the **Message Log** (Ares Graph Manager page) lists every node, each line a link that jumps to it. |
+| Camera Shift | `Shift + Arrows` | Moves the view of the graph you are working in up, down, left or right by a quarter of the visible area (**Camera Shift Step**, 0.05 to 1), at any zoom. Hold the keys to keep moving. Only the graph with keyboard focus moves (click on it first), never the one merely under the mouse, and never while you type in a text field or a pin value. Every graph editor. |
 | Copy / paste pin value | `Shift + Right Click` / `Shift + Left Click` | Copies a pin's value or pastes it, in the Details panel's own text format: a vector, colour, rotator, enum or asset copied from a property in Details pastes on a pin and the other way round. A `Shift` drag from a pin stays Multi Connect; only a click pastes. |
 | Rotate pins | `Ctrl + Shift + Down / Up` | Rotates the wires of a node's sibling pins by one place (on the selected node, or the node under the cursor). On two pins it is a swap: Branch True / False, an impure Cast's two exits, Subtract A / B (values included on unlinked inputs). On more it rotates: Sequence, Switch. The pins are those like the pin under the cursor, else the exec outputs, else the same-type inputs. With **Auto Format** on Connected Tree the tree is laid out again, same undo step. |
 
@@ -204,6 +209,21 @@ While a pin's value on a node has keyboard focus (click in it, or reach it with 
 
 Switch: **Pin Value Arrow Keys** and **Tab Cycles Pin Values** on the Node Commands page.
 
+#### Formatting a graph
+
+| Command | Default | What it lays out |
+|---------|---------|------------------|
+| Format All | `Ctrl + R` | Every tree of the graph (events, function entry, input events), stacked top to bottom. Protected reroutes stay where they are |
+| Format All, Lay Out Reroutes | `Ctrl + Shift + R` | The same, with protected reroutes laid out like any node. Run it once, and a later `Ctrl + R` moves nothing |
+| Format Selected | `Shift + R` | Only the selected nodes |
+| Format Connected | `Shift + C` | The selected nodes and everything linked to them, in both directions |
+
+How the layout is built, in short:
+* Exec chains run left to right on straight lines, pure nodes sit left of the pin they feed.
+* A node with nothing on its exec input but fed through its data pins (a SET fed by a Return Value, a Print String fed by a Break) is placed right of the node that feeds it, under that node's exec children, instead of in the column of the events. When the data comes through a pure node that another node also uses (a Break Hit Result feeding a Branch and a SET), it goes in that node's column, below it, so the wire still runs forward. A pure node that feeds nothing is placed the same way.
+* Comment bubbles count as part of their node: a node is never laid out under another node's bubble.
+* **Reroutes.** With **Collapse Reroutes** on (Formatter > Layout, on by default) reroute chains become direct wires, except the reroutes you protect: a reroute with a node comment (`Shift + F2`) is never removed, even with Collapse Reroutes off, and a reroute inside a comment box is kept too. The wire then runs through the kept reroutes only. A kept reroute always lands on the pin it feeds, so the wire after it is straight. **Protected Reroute Placement** (same page) chooses, for Format Selected, Format Connected, Format on Save and Auto Format, whether they are laid out or kept in place.
+
 #### Auto Format
 
 **Edit > Editor Preferences > Ares Graph Manager > Formatter > Auto Format** tidies a Blueprint graph right after you add a node: from the creation menu (right-click, `Tab`, a wire dragged to empty space), a spawn shortcut, a drop from My Blueprint, paste, `Ctrl + H` or Create Node on Wire.
@@ -217,6 +237,12 @@ Switch: **Pin Value Arrow Keys** and **Tab Cycles Pin Values** on the Node Comma
 The move is part of the same undo step as the new node, so one `Ctrl + Z` removes the node and puts everything back. Reroutes, comments, conversion nodes created by connecting two pins and nodes created by other tools, the compiler or undo are never moved.
 
 **Auto Add Parent Node** (on by default, same page): when you add an event that overrides one with a body in the parent class (an event of a Blueprint parent, or a C++ BlueprintNativeEvent), the Parent call is added right of it with the exec and the parameters wired, in the same undo step. Events with nothing to call, such as BeginPlay on a C++ parent, are left alone. It works whatever Auto Format is set to.
+
+**Connect Exec from Parameter** (on by default, same page): when the node you add takes its inputs from a pure node, its exec is wired to the node that produced that data. Drag from the Location of a Break Hit Result, pick Spawn Emitter at Location, and its exec is linked to the `then` of the Line Trace the Break Hit Result reads. The data links are followed upstream through pure nodes and reroutes. Only the **main exec output** is ever used (`then`, or the only exec output of the node), and only when it is free; secondary outputs such as Branch False, Cast Failed, Completed or Loop Body are never used. When no node qualifies, or more than one does, nothing is linked. Same undo step as the new node, whatever Auto Format is set to.
+
+**Insert New Node** (off by default, same page): drag a wire from an exec **input** that is already connected and create a node there: the new node goes into the chain before it (A -> New -> B), instead of running B beside A while A keeps running B too. From an exec output the engine already inserts the node; with this option on, what that output ran always continues from the new node's main exec output (`then`). Only nodes with one exec input and a main exec output (not a Branch, Sequence or For Each Loop). One `Ctrl + Z` removes the node and restores the old link.
+
+**Format on Save** (off by default, same page): saving a Blueprint runs **Format All** (the `Ctrl + R` layout) on each of its graphs that is open in a graph editor on screen, right before the file is written, so the saved file holds the formatted layout. Graphs that are not open are left as they are, since the formatter measures the node widgets on screen. Autosaves, cooking and other automatic saves never format. The format is one undo step. Like Format All, it replaces reroute chains with direct wires while **Collapse Reroutes** (Formatter > Layout, on by default) is on, keeping the protected reroutes (see [Formatting a graph](#formatting-a-graph)).
 
 ---
 
@@ -283,11 +309,14 @@ Customize the appearance of graph nodes. Changing `Enable Node Theme` requires a
 
 ### Compatibility
 
-AresGraphManager is **not compatible** with other graph-enhancement plugins that override wire drawing or auto-connect behavior. Known overlapping plugins:
+AresGraphManager is **not compatible** with other graph-enhancement plugins, because they do the same jobs (wire drawing, auto-connect, formatting, graph shortcuts) in a different way:
 
+- Blueprint Assist
 - [Node Graph Assistant](https://www.fab.com/listings/525a33bb-9b05-405d-bf3e-42ca990fb31b)
 - Electronic Nodes
 - Gridline Blueprints
+
+AresGraphManager is also designed around **mouse gestures plus shortcuts** (drag to connect, drop on a wire, cut wires, click a pin), not around keyboard-only navigation of the graph.
 
 If one of these is installed, AresGraphManager logs a warning at editor startup. Disable one of the two to avoid feature overlap on Auto Connect, Auto Insert, Wire Style, and connection drawing. AresGraphManager does not modify any other plugin's configuration files.
 
@@ -320,6 +349,10 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `X` while dragging | Bypass enabled | Bypass dragged node (reconnect flow and remove) |
 | `Alt + X` | Bypass enabled | Delete & bypass selected nodes |
 | `X` on disconnected node | Bypass enabled | Delete disconnected node |
+| `Ctrl + R` | Formatter | Format All, protected reroutes kept in place |
+| `Ctrl + Shift + R` | Formatter | Format All, protected reroutes laid out |
+| `Shift + R` | Formatter | Format Selected |
+| `Shift + C` | Formatter | Format Connected |
 | `Alt + Delete` | Cleanup enabled | Clean up orphaned reroutes and broken links |
 | `Shift + Alt + Delete` | Cleanup and Delete Unlinked Nodes enabled | Cleanup plus every node linked to nothing |
 | `Tab` | Node Commands | Creation menu filtered on the pin under the mouse |
@@ -333,6 +366,9 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | Double-click a Cast node | Node Commands | Open the class it casts to |
 | `Alt + A` / `Alt + D` / `Alt + S` | Node Commands | Select everything left / right / the linked tree |
 | `Space` / `Shift + Space` on a node | Node Commands | Get / Set swap; validated Get, advanced pins, pure / impure |
+| `Shift + Space` over a struct pin | Node Commands | Split the struct pin, or recombine it from one of its sub-pins |
+| `Shift + Arrows` | Node Commands | Camera Shift: move the view of the focused graph by a quarter of the visible area |
+| none (assign it) | Node Commands | Generate Getter, Generate Getter and Setter, Create Event, Detect Unused Nodes |
 | `Shift + Right / Left Click` on a pin | Node Commands | Copy / paste the pin value (Details panel format) |
 | `Ctrl + Shift + Down / Up` | Node Commands | Rotate / swap the wires of a node's sibling pins |
 | Middle click on a Cast or pure function | Toggle Get Set | Pure / impure (on a variable: Get / Set, as before) |
@@ -353,7 +389,7 @@ No. AresGraphManager hooks into the editor's connection drawing pipeline at runt
 No. The plugin computes its theme colors in-memory each session and never calls `SaveConfig()` on `UEditorStyleSettings`. Your original Editor Preferences ini stays untouched, so disabling or uninstalling AresGraphManager restores the default UE look automatically.
 
 **Can I use this with other graph editor plugins?**
-AresGraphManager is not compatible with NGA, Electronic Nodes or Gridline Blueprints — their wire drawing and auto-connect features overlap with ours. Disable one of the two to avoid conflicts.
+AresGraphManager is not compatible with Blueprint Assist, Node Graph Assistant, Electronic Nodes or Gridline Blueprints: they do the same jobs in a different way, and AresGraphManager is built around mouse gestures plus shortcuts rather than keyboard-only navigation. Disable one of the two to avoid conflicts. See [Compatibility](#compatibility).
 
 **Can I disable just the theme and keep the wires?**
 Yes. Every feature category (wires, theme, node styling, auto-connect, bypass, cleanup) can be toggled independently.

@@ -68,6 +68,16 @@
         <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/LevelBookmarks/README.md">View on GitHub</a></td>
     </tr>
     <tr>
+        <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AresGraphManager/Images/Logo.png" alt="Logo" style="width:100px"></td>
+        <td>
+            <h3>AresGraphManager</h3>
+            <p>Angled wire routing for Unreal Engine graph editors, auto-connect / auto-insert, bypass, graph cleanup, and a customizable editor + node theme.</p>
+            <br>
+        </td>
+        <td><a href="https://www.fab.com/portal/listings/e7d9e12b-dcc0-426e-b409-718df206ac2a">Buy on FAB</a></td>
+        <td><a href="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/AresGraphManager/README.md">View on GitHub</a></td>
+    </tr>
+    <tr>
         <td><img src="https://github.com/Ares9323/UEPluginsDocumentation/blob/master/SDL_EnhancedInput/Images/Logo.png" alt="Logo" style="width:100px"></td>
         <td>
             <h3>SDL Enhanced Input</h3>

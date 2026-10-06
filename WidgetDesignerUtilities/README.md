@@ -1,6 +1,6 @@
 # Widget Designer Utilities
 
-Adds color-coding, batch rename, binding warnings and widget extraction tools to the UMG Widget Designer hierarchy, making it easier to visually identify and organize widgets in complex UI layouts.
+Adds color-coding, batch rename, binding warnings, widget extraction tools and a Toggle Is Variable shortcut to the UMG Widget Designer hierarchy, making it easier to visually identify and organize widgets in complex UI layouts.
 
 Available on [FAB](https://www.fab.com/listings/f2c89fbf-cf4e-4cac-99b5-709f29920d2d)
 
@@ -69,6 +69,17 @@ Select a group of widgets and extract them into a new, reusable Widget Blueprint
 - **Same-parent validation** — The option only appears when all selected widgets share the same parent, preventing invalid extractions
 - **Clipboard preservation** — Your clipboard content is saved and restored after the operation
 
+### Toggle Is Variable (Ctrl+Alt+V)
+
+Turn the **Is Variable** checkbox of the selected widgets on or off without going to the Details panel.
+
+- **How to use**: select one or more widgets in the Designer canvas or in the Hierarchy and press **Ctrl+Alt+V**. A notification confirms the result ("2 widgets: Is Variable on")
+- **Mixed selection**: if any selected widget is not a variable, all of them become variables; if they all are variables already, all of them stop being variables. Press again to flip the whole selection back
+- **Where it works**: only while the Designer or the Hierarchy of a Widget Blueprint editor has keyboard focus. In the Details panel, in Graph mode or anywhere else in the editor the key does nothing
+- **Undo support**: each press is one undo step, applied exactly as the Details panel checkbox applies it (the Blueprint is recompiled so its variables follow)
+- **Rebindable**: change the key in **Editor Preferences > Keyboard Shortcuts > Widget Designer Utilities > Toggle Is Variable**
+- **Switch**: untick **Enable Toggle Is Variable Shortcut** in the settings (Shortcuts category) and the key is left free for other commands
+
 ### Settings
 
 All features are configurable via **Editor Preferences > Plugins > Widget Designer Utilities**.
@@ -81,6 +92,11 @@ All features are configurable via **Editor Preferences > Plugins > Widget Design
 | Require Ctrl | false | Require Ctrl modifier |
 | Require Shift | false | Require Shift modifier |
 | Require Alt | false | Require Alt modifier |
+
+#### Shortcuts
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Enable Toggle Is Variable Shortcut | true | Enable the Toggle Is Variable command (Ctrl+Alt+V) in the Designer and Hierarchy |
 
 #### Appearance
 | Setting | Default | Description |

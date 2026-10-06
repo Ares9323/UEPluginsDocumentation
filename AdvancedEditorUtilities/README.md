@@ -16,6 +16,10 @@ Available on [FAB](https://www.fab.com/listings/ee6ed5e0-75ae-4390-81a4-e983776e
 * [Keyboard shortcuts](#keyboard-shortcuts)
 * [Main widget and toolbar](#main-widget-and-toolbar)
 * [Global Search](#global-search)
+* [Blueprint navigation: Go to Symbol and Go to Parent Class](#blueprint-navigation-go-to-symbol-and-go-to-parent-class)
+* [Quick Menus](#quick-menus)
+* [Blueprint Creation Defaults](#blueprint-creation-defaults)
+* [Folder Bookmarks](#folder-bookmarks)
 * [View Modes and Console Commands panels](#view-modes-and-console-commands-panels)
 * [Material Parameters panel](#material-parameters-panel)
 * [Create PBR Textures](#create-pbr-textures)
@@ -46,6 +50,15 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 |---|---|---|
 | Open A.E.U. Utility | Ctrl + Shift + Alt + E | Everywhere |
 | Global Search | Ctrl + Alt + F | Everywhere |
+| Go to Symbol | Ctrl + G | Blueprint editors (Widget and Animation Blueprints included) |
+| Go to Parent Class | Ctrl + Shift + B | Blueprint editors |
+| Variable Selector | Ctrl + Shift + G | Blueprint editors |
+| Add Symbol | Ctrl + Shift + A | Blueprint editors |
+| Edit Variable Details | Ctrl + Shift + E | Blueprint editors |
+| Focus Search Box Under Cursor | Ctrl + Alt + K | Everywhere (acts on the panel under the mouse) |
+| Create Asset | Ctrl + Alt + N | Content Browser |
+| Store Folder Bookmark 1 to 9 | Ctrl + 1 to Ctrl + 9 | Content Browser (not while typing in a text field) |
+| Recall Folder Bookmark 1 to 9 | 1 to 9 | Content Browser (not while typing in a text field) |
 | Show in Explorer | Ctrl + Alt + E | Content Browser selection |
 | Restore Last Closed Tab | Ctrl + Shift + T | Everywhere |
 | Restore Saved Tab Group | Ctrl + Shift + Alt + T | Everywhere |
@@ -107,6 +120,7 @@ One window to find anything in the project: Blueprint functions, variables, even
 * Asset types are shown with the same name and colour as in the Content Browser
 * The **chips** under the search box turn each category on or off; the choice is remembered
 * The **scope** menu searches the project content (your `/Game` folder and project plugins), the project plus Engine content, or only the Blueprint you are editing
+* Inside a Blueprint editor, **Ctrl + G** opens the window already limited to that Blueprint (see [Go to Symbol](#go-to-symbol-ctrl--g))
 * Each category shows the best 50 results (configurable); **Show all** lists up to 2000
 
 ### Opening a result
@@ -128,6 +142,94 @@ Blueprints saved before Find in Blueprints data existed, or never resaved since,
 
 ### Settings
 In `Editor Preferences > Advanced Editor Utilities > Global Search`: enable or disable the feature (restart required), the categories searched by default, include Engine content, results per category, always open centered, close on focus loss, and background indexing.
+
+---
+
+## Blueprint navigation: Go to Symbol and Go to Parent Class
+Two shortcuts that work in every Blueprint editor, Widget Blueprints and Animation Blueprints included. They only act while the keyboard focus is inside a Blueprint editor, so the same keys keep their usual meaning everywhere else (Ctrl + G stays Regroup in the Level Editor). When several Blueprints are open, they act on the one you clicked into.
+
+### Go to Symbol (Ctrl + G)
+* Press **Ctrl + G** in a Blueprint editor: [Global Search](#global-search) opens with its scope set to **Current Blueprint** and pinned to that Blueprint
+* Type to jump to any of its functions, variables, events, macros, nodes, comments or pin values, then **Enter**
+* Picking another scope in the scope menu drops the pin; the next time the window opens it starts from your settings again
+* Needs Global Search enabled: if it is off, a notification tells you where to turn it on
+
+### Go to Parent Class (Ctrl + Shift + B)
+* Press **Ctrl + Shift + B** in a Blueprint editor to open its parent class
+* A **Blueprint** parent opens in its own Blueprint editor
+* A **C++** parent opens its header in your IDE (the same as the "Parent class" link at the top right of the Blueprint editor). A notification tells you when there is no parent, when source code navigation is not available, or when the header cannot be found
+
+### Settings
+Both can be switched off in `Editor Preferences > Advanced Editor Utilities > Navigation` (**Enable Go to Symbol**, **Enable Go to Parent Class**) and rebound in `Editor Preferences > Keyboard Shortcuts` ("Go to Symbol", "Go to Parent Class").
+
+---
+
+## Quick Menus
+Small keyboard popups that open at the mouse and do one job each, so common Blueprint chores need neither the mouse nor the Details panel. Type to filter, **Up / Down** to move, **Enter** to confirm, **Esc** to close (they also close when you click elsewhere, like a context menu).
+
+| Command | Default | Where | What it does |
+|---|---|---|---|
+| **Variable Selector** | Ctrl + Shift + G | Blueprint editors | Lists the local variables of the function you are in, the Blueprint's own variables, its components and the inherited ones (Blueprint and C++), each with its type icon and colour. **Enter** places a Get node at the mouse, **Shift + Enter** a Set node (refused for read-only variables), **Alt + Enter** selects the variable in My Blueprint so the Details panel shows it |
+| **Add Symbol** | Ctrl + Shift + A | Blueprint editors | Creates a variable, function, macro, event dispatcher or custom event (in an event graph). Tick **Local** next to the type to make the variable a local variable of the function you are in. **Up / Down** picks the kind, type the name (checked live, an invalid or taken name is shown right away), **Tab** goes to the type (**Space** opens the type list) and then to the **Category**: type one, or open the arrow and pick one the Blueprint already uses, as in the Details panel. **Enter** creates it and selects it (a new function or macro opens). Hold **Shift**, **Ctrl** or **Alt** with Enter to apply that [Creation Defaults](#blueprint-creation-defaults) preset; a category you typed wins over the preset's |
+| **Edit Variable Details** | Ctrl + Shift + E | Blueprint editors | Edits the variable selected in My Blueprint, or the variable of the selected Get / Set node: type, Instance Editable, Blueprint Read Only, Private, Expose on Spawn, Category, Tooltip and Replication (None / Replicated / RepNotify, with the OnRep function created). **Up / Down** or **Tab** move between rows, **Space** toggles, **Enter** commits a text field, **Left / Right** change the replication. Each change is its own undo step. Only the Blueprint's own member variables (local and inherited ones are refused with a notification) |
+| **Focus Search Box Under Cursor** | Ctrl + Alt + K | Any editor window | Puts the keyboard focus in the search box of the panel under the mouse (Content Browser, Details, My Blueprint, Palette, Outliner, Find Results...) with its text selected, ready to type over. Over a panel without a search box nothing happens |
+| **Create Asset** | Ctrl + Alt + N | Content Browser | Lists the asset types of the Content Browser's Add menu with their category and colour. Type a few letters ("mat inst"), **Enter** creates the asset in the current folder and starts renaming it, with the type's own options dialog when it has one (the parent class picker of a Blueprint Class, for example). Not available in a virtual folder such as `/All` or in a read-only one |
+
+Every popup has its own switch in `Editor Preferences > Advanced Editor Utilities > Quick Menus`, and every key can be changed in `Editor Preferences > Keyboard Shortcuts`.
+
+---
+
+## Blueprint Creation Defaults
+Choose what a new variable, function or custom event gets, depending on the modifier key you hold while you create it. Instead of creating a variable and then ticking the same three boxes in the Details panel every time, hold a key and it is born that way.
+
+### Out of the box
+| Hold | A new variable gets | A new function gets |
+|---|---|---|
+| nothing | the engine defaults (the preset is empty) | the engine defaults |
+| **Shift** | **Instance Editable** (the eye is open) | nothing |
+| **Ctrl** | **Private** and **Blueprint Read Only** | nothing |
+| **Alt** | the category **Config** | the category **Config** |
+
+For example: hold **Shift** and click **+ Variable** in My Blueprint, and the new variable is already Instance Editable. **Ctrl** + click gives a private, read-only variable for internal state. **Alt** + click on **+ Function** puts the new function straight in the Config category. A plain click behaves exactly as before.
+
+### When it applies
+* Adding a variable, function or custom event the usual ways: the **+** buttons of My Blueprint, **Promote to Variable** on a pin, **Create Variable** on a missing variable node, and custom events added from the graph's node menu. The [Add Symbol](#quick-menus) popup applies the preset of the modifier held with Enter
+* Holding several modifiers applies their presets one after the other, in the order Shift, Ctrl, Alt
+* The preset is part of the creation's undo step: one **Ctrl + Z** removes the new item together with its preset
+* Pasted, duplicated or loaded items are never touched, and neither is anything created by compiling or by undo
+
+### Editing the presets
+In `Editor Preferences > Advanced Editor Utilities > Blueprint Defaults` there is a master switch and four presets, **No Modifier**, **Shift**, **Ctrl** and **Alt**. Each preset has three parts, and every field has its own checkbox: an unticked field is left as the engine sets it, so a preset only changes what you ask it to.
+* **Variable**: Instance Editable, Blueprint Read Only, Private, Expose on Spawn, Expose to Cinematics, Transient, Save Game, Advanced Display, Category, Tooltip
+* **Function**: every field of the Details panel: Pure, Const, Access (Public / Protected / Private), Category, Tooltip (Description), Keywords, Compact Node Title, Call In Editor, Exec, Thread Safe, Unsafe During Actor Construction, Deprecated (with its message)
+* **Custom event**: Replicates (Not Replicated / Multicast / Run on Server / Run on owning Client), Reliable, Access, Category, Tooltip (Description), Keywords, Call In Editor, Deprecated (with its message). Replication is an event setting: Blueprint functions cannot replicate, so the function preset has no Replicates
+
+The **Restore Default Creation Presets** checkbox puts the four presets back as in the table above.
+
+---
+
+## Folder Bookmarks
+Jump between the Content Browser folders you use most with a single key, like the camera bookmarks of the level viewport but for folders. Nine slots, one per number key.
+
+### Step by step
+1. Click inside the Content Browser (the docked one or the drawer opened with Ctrl + Space) so it has the keyboard focus.
+2. Open a folder you use often, for example `/Game/Characters/Hero`.
+3. Press **Ctrl + 1**. A notification confirms it: "Bookmark 1: /Game/Characters/Hero".
+4. Open another folder, for example `/Game/UI/Widgets`, and press **Ctrl + 2** to store it in slot 2.
+5. Now, wherever you are in the Content Browser, press **1** to go back to `/Game/Characters/Hero`, and **2** to go to `/Game/UI/Widgets`.
+
+Use **Ctrl + 1** to **Ctrl + 9** to store and **1** to **9** to recall. Storing on a slot that is already used replaces it.
+
+### Good to know
+* The keys work only while the Content Browser has the keyboard focus. In the level viewport, 1 to 9 and Ctrl + 1 to Ctrl + 9 keep their usual meaning (camera bookmarks).
+* While you type in the search box, the path box or while renaming an asset, the number keys type numbers as usual.
+* Pressing a number with nothing stored shows a hint on how to store it. A bookmarked folder that was deleted or renamed shows "no longer exists".
+* Bookmarks are saved **per project and per user** (in the project's `Saved/Config` folder), so every project has its own, they survive editor restarts, and they are not shared through source control.
+
+### Settings
+* `Editor Preferences > Advanced Editor Utilities > Folder Bookmarks` lists the nine slots: see what is stored, or type or clear a path by hand (a content path such as `/Game/Characters`).
+* `Editor Preferences > Advanced Editor Utilities > Navigation > Enable Folder Bookmarks` turns the feature on or off.
+* The keys can be changed in `Editor Preferences > Keyboard Shortcuts`: search "Folder Bookmark" (Store Folder Bookmark 1 to 9, Recall Folder Bookmark 1 to 9).
 
 ---
 
@@ -268,6 +370,15 @@ Custom events keep their name and their replication in sync, so a `Server_` even
 * Nothing happens when events are pasted, duplicated, loaded or compiled, and overridden parent events are left alone
 * Settings in `Editor Preferences > Advanced Editor Utilities > Blueprint > Replication Naming`: master switch, set the replication on rename, rename on replication change, optionally clear the replication when a new name has no affix, and the three affixes, each as a prefix or a suffix (for example `_Srv`). An empty affix takes that replication out of the naming
 
+### Replication naming for variables
+Member variables get their replication from the name in the same way:
+* Name a variable `R_Health` (when you create it or when you rename it) and it becomes **Replicated**
+* Name it `RN_Health` and it becomes **RepNotify**, with its `OnRep_RN_Health` function created for you, exactly as picking RepNotify in the Details panel does (the function is named after the whole variable name, like the engine names it)
+* Renaming `RN_Health` to `R_Health` keeps it Replicated without RepNotify. Renaming it to a name with no affix keeps the replication, unless **clear the replication when a new name has no affix** is on, then it becomes Not Replicated (the old OnRep function stays, as the engine leaves it)
+* Works from My Blueprint, the Details name box and any other rename, and on creation (for example Promote to Variable straight to `RN_Ammo`). The change is one undo step together with the rename or the creation
+* Pasted variables are left alone, and so are sets, maps and event dispatchers (the Details panel cannot replicate them either)
+* Settings in the same **Replication Naming** section: the switch for variables (on by default, under the master switch) and the two affixes, `R_` and `RN_` by default, each as a prefix or a suffix
+
 ### Node shortcuts
 * You can add/edit/remove custom shortcuts for Blueprint and Material nodes from the settings; if you do that you'll need to restart the editor to see them working:
 
@@ -276,7 +387,7 @@ Custom events keep their name and their replication in sync, so a `Server_` even
 ---
 
 ## Editor settings
-* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Blueprint** (Replication Naming), **Naming Convention**, **World Outliner**, **Folder Templates**, **Global Search**. They all edit the same settings object, so nothing changes in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
+* The settings live in `Editor Preferences` under their own **Advanced Editor Utilities** category, not inside Plugins, split into one page per topic so the big arrays never crowd each other: **Advanced Settings** (restore all, graph screenshot zoom, auto-confirm prompts, Material Parameters options, and the on/off switch of every menu entry and toolbar button the plugin adds), **Console Commands**, **View Modes**, **Common Strings**, **Node Shortcuts**, **Blueprint** (Replication Naming for custom events and variables), **Blueprint Defaults** (the [Creation Defaults](#blueprint-creation-defaults) presets), **Naming Convention**, **World Outliner**, **Folder Templates**, **Global Search**, **Navigation** (Go to Symbol, Go to Parent Class and Folder Bookmarks switches), **Quick Menus** (one switch per popup), **Folder Bookmarks** (the nine stored folders). They all edit the same settings object, except **Folder Bookmarks**, which is saved per project and per user. Splitting them into pages changed nothing in how they are saved (the pictures below still show the older single page). In every page the plain options come first and the long arrays last, with each array's reset checkbox above it.
 * **Context Menu Placement** decides where the plugin's section goes inside the Content Browser menus: bottom (the default, where a menu extension lands on its own), top, or before / after a section you name in **Context Menu Anchor Section** (`CommonAssetActions` is the Edit / Rename / Duplicate block, `ImportedAssetActions` the Reimport one). An unknown name falls back to the bottom.
 * The category sits right below **General**. If you would rather have it elsewhere in the list, `Settings Category Sort Priority` in Advanced Settings moves it (lower goes higher up; the engine's own categories all sit at 0, except Advanced at 1).
 * The Level Design settings (arrays, physics tools, renamer, steps...) are per-project and live in `Project Settings > Plugins > AEU Level Design Settings`.
