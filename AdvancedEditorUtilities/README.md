@@ -49,7 +49,7 @@ Every entry is an editor command, so it can be rebound or assigned in `Editor Pr
 | Command | Default | Where it works |
 |---|---|---|
 | Open A.E.U. Utility | Ctrl + Shift + Alt + E | Everywhere |
-| Global Search | Ctrl + Alt + F | Everywhere |
+| Global Search | Ctrl + Alt + P | Everywhere |
 | Go to Symbol | Ctrl + G | Blueprint editors (Widget and Animation Blueprints included) |
 | Go to Parent Class | Ctrl + Shift + B | Blueprint editors |
 | Variable Selector | Ctrl + Shift + G | Blueprint editors |
@@ -109,9 +109,10 @@ The `Tools` main menu also gains an **Advanced Editor Utilities** section with t
 One window to find anything in the project: Blueprint functions, variables, events and macros, graph nodes, comments, pin values, and assets by name and type.
 
 ### Opening it
-* Press **Ctrl + Alt + F** anywhere in the editor (Level Editor, Blueprint editors, any asset editor), or use `Tools > Advanced Editor Utilities > Global Search`
+* Press **Ctrl + Alt + P** anywhere in the editor (Level Editor, Blueprint editors, any asset editor), or use `Tools > Advanced Editor Utilities > Global Search`
 * The window opens centered on the monitor under the mouse. Move or resize it and it remembers that rectangle for that monitor (or set **Always open centered**)
 * **Esc** closes it. It also closes when you click elsewhere, unless **Pin** is on
+* It reopens with your last search already selected: type to replace it (turn off **Keep Last Query** to always start empty)
 
 ### Searching
 * Results appear while you type, grouped by category with a count: **Assets**, **Functions**, **Variables**, **Events**, **Macros**, **Nodes**, **Comments**, **Pin Values**. Each row shows the name, its type or graph, and the Blueprint it lives in

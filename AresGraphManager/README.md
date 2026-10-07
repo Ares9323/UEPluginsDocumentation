@@ -169,7 +169,7 @@ Remove a node from the execution flow while keeping the chain intact. The upstre
 
 ### Node Commands
 
-Keyboard commands for everyday node editing. Each one has its own enable switch and key on the **Node Commands** settings page, is one undo step, and is ignored while you type in a text field.
+Keyboard commands for everyday node editing. Each one has its own enable switch and key on the **Node Commands** settings page (grouped by kind: Creation, Variables and Events, Node Toggles, Rearrange, Selection, Comments, Pin Values, View), is one undo step, and is ignored while you type in a text field.
 
 | Command | Default | What it does |
 |---------|---------|--------------|
@@ -187,6 +187,7 @@ Keyboard commands for everyday node editing. Each one has its own enable switch 
 | Get / Set swap | `Space` | On a variable: a Get (plain or validated) becomes a Set, a Set becomes a Get. On other nodes `Space` is left to the engine. |
 | Toggle node context | `Shift + Space` | With the mouse over a struct pin (a Vector, a Hit Result...), splits it; over one of the pins of a split struct (X, Y, Z), recombines it, exactly like the right-click Split / Recombine Struct Pin. This comes first, before the selection. A struct pin with a link cannot be split, and a split struct with a linked sub-pin cannot be recombined (same rules as the engine): then, as on any other pin or off the pins, it acts on the nodes. On a variable: a Set becomes a validated Get, a Get switches plain / validated. On other nodes: opens or closes the advanced pins (the arrow at the bottom of Print String), else switches a Cast between pure and impure, or shows / hides the exec pins of a function that has both forms. Blueprint graphs for the pin step. |
 | Generate Getter | none | On a variable of this Blueprint (selected in My Blueprint, or a selected Get / Set node), creates the function `Get<Variable>`: pure, const, in the variable's category, returning the variable through an output named after it. A bool drops its leading `b` (`bIsAlive` gives `GetIsAlive`). If the getter exists already it opens instead of being duplicated. Also in the node's right-click menu, under **Ares Graph Manager**. |
+| Generate Setter | none | Only `Set<Variable>`: a function with one input of the variable's type that sets it. A function that exists already is kept. |
 | Generate Getter and Setter | none | Same as Generate Getter, plus `Set<Variable>`: a function with one input of the variable's type that sets it. Functions that exist already are kept. Both are one undo step. |
 | Create Event | none | Creates a custom event with the signature of a delegate and binds it: the delegate pin under the mouse, else the first free delegate input of the selected node (Bind Event to a dispatcher, Assign, Set Timer by Event...). The event is placed left of the node and linked. Event graphs only. Also in the right-click menu of such a node or pin. |
 | Detect Unused Nodes | none | Selects the nodes of the focused Blueprint graph that never run and feed nothing that runs. Execution is followed from every entry point (events, input events, function entry, macro inputs), then every node that runs keeps the nodes feeding its inputs; reroutes count as wires. Comments are never selected and the view does not move. A notification gives the count, and the **Message Log** (Ares Graph Manager page) lists every node, each line a link that jumps to it. |
@@ -368,7 +369,7 @@ Some settings have no reset: Enable AresGraphManager, the category position in E
 | `Space` / `Shift + Space` on a node | Node Commands | Get / Set swap; validated Get, advanced pins, pure / impure |
 | `Shift + Space` over a struct pin | Node Commands | Split the struct pin, or recombine it from one of its sub-pins |
 | `Shift + Arrows` | Node Commands | Camera Shift: move the view of the focused graph by a quarter of the visible area |
-| none (assign it) | Node Commands | Generate Getter, Generate Getter and Setter, Create Event, Detect Unused Nodes |
+| none (assign it) | Node Commands | Generate Getter, Generate Setter, Generate Getter and Setter, Create Event, Detect Unused Nodes |
 | `Shift + Right / Left Click` on a pin | Node Commands | Copy / paste the pin value (Details panel format) |
 | `Ctrl + Shift + Down / Up` | Node Commands | Rotate / swap the wires of a node's sibling pins |
 | Middle click on a Cast or pure function | Toggle Get Set | Pure / impure (on a variable: Get / Set, as before) |
