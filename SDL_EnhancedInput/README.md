@@ -50,6 +50,18 @@ To resolve it yourself, disable Unreal's XInput plugin:
 
 This is the recommended setup when you want SDL Enhanced Input to be the single source of controller input.
 
+### Quick taps at low frame rates
+
+PlayStation, Switch and most other controllers deliver every press, even one that starts and ends between two frames. Xbox pads on Windows are read through XInput or Windows.Gaming.Input by default, which only report the state once per frame, so at low frame rates a quick tap can be lost. To keep them:
+
+1. **Project Settings > Plugins > SDL Enhanced Input > SDL Hints > Drivers > RawInput = Enabled** (WGI can stay enabled)
+2. Restart the editor (driver hints are read once, at startup)
+3. Check the Output Log: the controller's line at startup should show `path="\\?\HID#..."`. `path="XInput#0"` or `path="null"` means RawInput did not take the pad
+
+RawInput is off by default because it changes the driver for every device, and on older wheels and flight sticks it can take the device away from DirectInput, where their force feedback comes from. Turn it on if you target Xbox pads and care about low frame rates.
+
+Even with RawInput, the two analog triggers and the Guide button of Xbox pads are still read once per frame (Windows only exposes them through XInput), so very quick taps on them can be lost. Leave **RawInputCorrelateXInput** at Default: without it the two triggers share one axis and can no longer be pressed independently.
+
 ---
 
 ## CommonUI Button Prompts
@@ -556,6 +568,9 @@ No. The plugin registers alongside UE's native input devices. Standard gamepad b
 
 **Why does my Xbox controller register every input twice?**
 On Windows, Unreal's built-in XInput Device plugin reads Xbox pads in parallel with this plugin. Pick a resolution from the one-time editor dialog, or see [Xbox Controllers & Duplicate Input](#xbox-controllers--duplicate-input). PlayStation, Switch, and other controllers are not affected.
+
+**At low frame rates my Xbox controller misses quick button taps. Why?**
+Xbox pads are read once per frame unless RawInput is enabled. See [Quick taps at low frame rates](#quick-taps-at-low-frame-rates).
 
 **How do I show controller-specific button prompts (PlayStation / Xbox / Switch icons)?**
 Enable **CommonUI**, register the included controller-data presets, and turn on **Enable Enhanced Input Support**. See [CommonUI Button Prompts](#commonui-button-prompts). If prompts disappear when switching controllers, the active preset is keyed by the wrong keys — see the icon-resolution notes in that section.
